@@ -7,7 +7,7 @@
 - [Routing](#routing)
   - [Stubbing The Routes](#stubbing-the-routes)
   - [Displaying A View](#displaying-a-view)
-- [Building Layouts & Views](#building-layouts-and-views)
+- [Building Layouts & Views](#building-layouts--views)
   - [Defining The Layout](#defining-the-layout)
   - [Defining The Child View](#defining-the-child-view)
 - [Adding Tasks](#adding-tasks)
@@ -38,7 +38,7 @@ php artisan make:migration create_tasks_table --create=tasks
 
 The migration will be placed in the `database/migrations` directory of your project. As you may have noticed, the `make:migration` command already added an auto-incrementing ID and timestamps to the migration file. Let's edit this file and add an additional `string` column for the name of our tasks:
 
-````php
+```php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -82,10 +82,10 @@ This command will create all of our database tables. If you inspect the database
 
 So, let's define a `Task` model that corresponds to our `tasks` database table we just created. Again, we can use an Artisan command to generate this model. In this case, we'll use the `make:model` command:
 
-```php
+```bash
 php artisan make:model Task
 ```
-```
+
 The model will be placed in the `app` directory of your application. By default, the model class is empty. We do not have to explicitly tell the Eloquent model which table it corresponds to because it will assume the database table is the plural form of the model name. So, in this case, the `Task` model is assumed to correspond with the `tasks` database table. Here is what our empty model should look like:
 
 
@@ -112,7 +112,7 @@ Next, we're ready to add a few routes to our application. Routes are used to poi
 
 For this application, we know we will need at least three routes: a route to display a list of all of our tasks, a route to add new tasks, and a route to delete existing tasks. So, let's stub all of these routes in the `app/Http/routes.php` file:
 
-```
+```php
 <?php
 
 use App\Task;
@@ -146,7 +146,7 @@ Next, let's fill out our `/` route. From this route, we want to render an HTML t
 
 In Laravel, all HTML templates are stored in the `resources/views` directory, and we can use the `view` helper to return one of these templates from our route:
 
-```
+```php
 Route::get('/', function () {
     return view('tasks');
 });
@@ -168,7 +168,7 @@ As we discussed earlier, all Laravel views are stored in `resources/views`. So, 
 
 Our `app.blade.php` view should look like the following:
 
-```
+```blade
 // resources/views/layouts/app.blade.php
 
 <!DOCTYPE html>
@@ -199,7 +199,7 @@ Great, our application layout is finished. Next, we need to define a view that c
 
 We'll skip over some of the Bootstrap CSS boilerplate and only focus on the things that matter. Remember, you can download the full source for this application on [GitHub](https://github.com/laravel/quickstart-basic):
 
-```
+```blade
 // resources/views/tasks.blade.php
 
 @extends('layouts.app')
@@ -246,7 +246,7 @@ Before moving on, let's talk about this template a bit. First, the `@extends` di
 
 Now we have defined a basic layout and view for our application. Remember, we are returning this view from our `/` route like so:
 
-```
+```php
 Route::get('/', function () {
     return view('tasks');
 });
@@ -264,7 +264,7 @@ Now that we have a form in our view, we need to add code to our `POST /task` rou
 
 For this form, we will make the `name` field required and state that it must contain less than `255` characters. If the validation fails, we will redirect the user back to the `/` URL, as well as flash the old input and errors into the [session](https://laravel.com/docs/5.1/session):
 
-```
+```php
 Route::post('/task', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:255',
@@ -286,7 +286,7 @@ Let's take a break for a moment to talk about the `->withErrors($validator)` por
 
 Remember that we used the `@include('common.errors')` directive within our view to render the form's validation errors. The `common.errors` will allow us to easily show validation errors in the same format across all of our pages. Let's define the contents of this view now:
 
-```
+```blade
 // resources/views/common/errors.blade.php
 
 @if (count($errors) > 0)
@@ -311,7 +311,7 @@ Remember that we used the `@include('common.errors')` directive within our view 
 
 Now that input validation is handled, let's actually create a new task by continuing to fill out our route. Once the new task has been created, we will redirect the user back to the `/` URL. To create the task, we may use the `save` method after creating and setting properties on a new Eloquent model:
 
-```
+```php
 Route::post('/task', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:255',
@@ -337,7 +337,7 @@ Great! We can now successfully create tasks. Next, let's continue adding to our 
 
 First, we need to edit our `/` route to pass all of the existing tasks to the view. The `view` function accepts a second argument which is an array of data that will be made available to the view, where each key in the array will become a variable within the view:
 
-```
+```php
 Route::get('/', function () {
     $tasks = Task::orderBy('created_at', 'asc')->get();
 
@@ -349,7 +349,7 @@ Route::get('/', function () {
 
 Once the data is passed, we can spin through the tasks in our `tasks.blade.php` view and display them in a table. The `@foreach` Blade construct allows us to write concise loops that compile down into blazing fast plain PHP code:
 
-```
+```blade
 @extends('layouts.app')
 
 @section('content')
@@ -401,7 +401,7 @@ Our task application is almost complete. But, we have no way to delete our exist
 
 We left a "TODO" note in our code where our delete button is supposed to be. So, let's add a delete button to each row of our task listing within the `tasks.blade.php` view. We'll create a small single-button form for each task in the list. When the button is clicked, a `DELETE /task` request will be sent to the application:
 
-```
+```blade
 <tr>
     <!-- Task Name -->
     <td class="table-text">
@@ -426,7 +426,7 @@ Note that the delete button's form `method` is listed as `POST`, even though we 
 
 We can spoof a `DELETE` request by outputting the results of the `method_field('DELETE')` function within our form. This function generates a hidden form input that Laravel recognizes and will use to override the actual HTTP request method. The generated field will look like the following:
 
-```
+```html
 <input type="hidden" name="_method" value="DELETE">
 ```
 
@@ -434,11 +434,10 @@ We can spoof a `DELETE` request by outputting the results of the `method_field('
 
 Finally, let's add logic to our route to actually delete the given task. We can use the Eloquent `findOrFail` method to retrieve a model by ID or throw a 404 exception if the model does not exist. Once we retrieve the model, we will use the `delete` method to delete the record. Once the record is deleted, we will redirect the user back to the `/` URL:
 
-```
+```php
 Route::delete('/task/{id}', function ($id) {
     Task::findOrFail($id)->delete();
 
     return redirect('/');
 });
 ```
-````
