@@ -32,13 +32,13 @@ First, let's use a migration to define a database table to hold all of our tasks
 
 So, let's build a database table that will hold all of our tasks. The [Artisan CLI](https://laravel.com/docs/5.1/artisan) can be used to generate a variety of classes and will save you a lot of typing as you build your Laravel projects. In this case, let's use the `make:migration` command to generate a new database migration for our `tasks` table:
 
-```
+```bash
 php artisan make:migration create_tasks_table --create=tasks
 ```
 
 The migration will be placed in the `database/migrations` directory of your project. As you may have noticed, the `make:migration` command already added an auto-incrementing ID and timestamps to the migration file. Let's edit this file and add an additional `string` column for the name of our tasks:
 
-````
+````php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -69,7 +69,8 @@ class CreateTasksTable extends Migration
     {
         Schema::drop('tasks');
     }
-}```
+}
+```
 
 To run our migration, we will use the `migrate` Artisan command. If you are using Homestead, you should run this command from within your virtual machine, since your host machine will not have direct access to the database:
 
@@ -81,23 +82,20 @@ This command will create all of our database tables. If you inspect the database
 
 So, let's define a `Task` model that corresponds to our `tasks` database table we just created. Again, we can use an Artisan command to generate this model. In this case, we'll use the `make:model` command:
 
-````
-
+```php
 php artisan make:model Task
-
 ```
-
+```
 The model will be placed in the `app` directory of your application. By default, the model class is empty. We do not have to explicitly tell the Eloquent model which table it corresponds to because it will assume the database table is the plural form of the model name. So, in this case, the `Task` model is assumed to correspond with the `tasks` database table. Here is what our empty model should look like:
 
 
-```
-
+```php
 <?php
- 
+
 namespace App;
- 
+
 use Illuminate\Database\Eloquent\Model;
- 
+
 class Task extends Model
 {
     //
@@ -116,24 +114,24 @@ For this application, we know we will need at least three routes: a route to dis
 
 ```
 <?php
- 
+
 use App\Task;
 use Illuminate\Http\Request;
- 
+
 /**
  * Display All Tasks
  */
 Route::get('/', function () {
     //
 });
- 
+
 /**
  * Add A New Task
  */
 Route::post('/task', function (Request $request) {
     //
 });
- 
+
 /**
  * Delete An Existing Task
  */
@@ -172,22 +170,22 @@ Our `app.blade.php` view should look like the following:
 
 ```
 // resources/views/layouts/app.blade.php
- 
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>Laravel Quickstart - Basic</title>
- 
+
         <!-- CSS And JavaScript -->
     </head>
- 
+
     <body>
         <div class="container">
             <nav class="navbar navbar-default">
                 <!-- Navbar Contents -->
             </nav>
         </div>
- 
+
         @yield('content')
     </body>
 </html>
@@ -203,30 +201,30 @@ We'll skip over some of the Bootstrap CSS boilerplate and only focus on the thin
 
 ```
 // resources/views/tasks.blade.php
- 
+
 @extends('layouts.app')
- 
+
 @section('content')
- 
+
     <!-- Bootstrap Boilerplate... -->
- 
+
     <div class="panel-body">
         <!-- Display Validation Errors -->
         @include('common.errors')
- 
+
         <!-- New Task Form -->
         <form action="/task" method="POST" class="form-horizontal">
             {{ csrf_field() }}
- 
+
             <!-- Task Name -->
             <div class="form-group">
                 <label for="task" class="col-sm-3 control-label">Task</label>
- 
+
                 <div class="col-sm-6">
                     <input type="text" name="name" id="task-name" class="form-control">
                 </div>
             </div>
- 
+
             <!-- Add Task Button -->
             <div class="form-group">
                 <div class="col-sm-offset-3 col-sm-6">
@@ -237,7 +235,7 @@ We'll skip over some of the Bootstrap CSS boilerplate and only focus on the thin
             </div>
         </form>
     </div>
- 
+
     <!-- TODO: Current Tasks -->
 @endsection
 ```
@@ -271,13 +269,13 @@ Route::post('/task', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:255',
     ]);
- 
+
     if ($validator->fails()) {
         return redirect('/')
             ->withInput()
             ->withErrors($validator);
     }
- 
+
     // Create The Task...
 });
 ```
@@ -290,14 +288,14 @@ Remember that we used the `@include('common.errors')` directive within our view 
 
 ```
 // resources/views/common/errors.blade.php
- 
+
 @if (count($errors) > 0)
     <!-- Form Error List -->
     <div class="alert alert-danger">
         <strong>Whoops! Something went wrong!</strong>
- 
+
         <br><br>
- 
+
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>
@@ -318,17 +316,17 @@ Route::post('/task', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'name' => 'required|max:255',
     ]);
- 
+
     if ($validator->fails()) {
         return redirect('/')
             ->withInput()
             ->withErrors($validator);
     }
- 
+
     $task = new Task;
     $task->name = $request->name;
     $task->save();
- 
+
     return redirect('/');
 });
 ```
@@ -342,7 +340,7 @@ First, we need to edit our `/` route to pass all of the existing tasks to the vi
 ```
 Route::get('/', function () {
     $tasks = Task::orderBy('created_at', 'asc')->get();
- 
+
     return view('tasks', [
         'tasks' => $tasks
     ]);
@@ -353,26 +351,26 @@ Once the data is passed, we can spin through the tasks in our `tasks.blade.php` 
 
 ```
 @extends('layouts.app')
- 
+
 @section('content')
     <!-- Create Task Form... -->
- 
+
     <!-- Current Tasks -->
     @if (count($tasks) > 0)
         <div class="panel panel-default">
             <div class="panel-heading">
                 Current Tasks
             </div>
- 
+
             <div class="panel-body">
                 <table class="table table-striped task-table">
- 
+
                     <!-- Table Headings -->
                     <thead>
                         <th>Task</th>
                         <th>&nbsp;</th>
                     </thead>
- 
+
                     <!-- Table Body -->
                     <tbody>
                         @foreach ($tasks as $task)
@@ -381,7 +379,7 @@ Once the data is passed, we can spin through the tasks in our `tasks.blade.php` 
                                 <td class="table-text">
                                     <div>{{ $task->name }}</div>
                                 </td>
- 
+
                                 <td>
                                     <!-- TODO: Delete Button -->
                                 </td>
@@ -409,13 +407,13 @@ We left a "TODO" note in our code where our delete button is supposed to be. So,
     <td class="table-text">
         <div>{{ $task->name }}</div>
     </td>
- 
+
     <!-- Delete Button -->
     <td>
         <form action="/task/{{ $task->id }}" method="POST">
             {{ csrf_field() }}
             {{ method_field('DELETE') }}
- 
+
             <button>Delete Task</button>
         </form>
     </td>
@@ -439,7 +437,8 @@ Finally, let's add logic to our route to actually delete the given task. We can 
 ```
 Route::delete('/task/{id}', function ($id) {
     Task::findOrFail($id)->delete();
- 
+
     return redirect('/');
 });
 ```
+````
