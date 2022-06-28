@@ -38,9 +38,38 @@ php artisan make:migration create_tasks_table --create=tasks
 
 The migration will be placed in the `database/migrations` directory of your project. As you may have noticed, the `make:migration` command already added an auto-incrementing ID and timestamps to the migration file. Let's edit this file and add an additional `string` column for the name of our tasks:
 
-```
-<?phpuse Illuminate\Database\Schema\Blueprint;use Illuminate\Database\Migrations\Migration;class CreateTasksTable extends Migration{    /**     * Run the migrations.     *     * @return void     */    public function up()    {        Schema::create('tasks', function (Blueprint $table) {            $table->increments('id');            $table->string('name');            $table->timestamps();        });    }    /**     * Reverse the migrations.     *     * @return void     */    public function down()    {        Schema::drop('tasks');    }}
-```
+````
+<?php
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateTasksTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('tasks', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('tasks');
+    }
+}```
 
 To run our migration, we will use the `migrate` Artisan command. If you are using Homestead, you should run this command from within your virtual machine, since your host machine will not have direct access to the database:
 
@@ -52,14 +81,27 @@ This command will create all of our database tables. If you inspect the database
 
 So, let's define a `Task` model that corresponds to our `tasks` database table we just created. Again, we can use an Artisan command to generate this model. In this case, we'll use the `make:model` command:
 
-```
+````
+
 php artisan make:model Task
+
 ```
 
 The model will be placed in the `app` directory of your application. By default, the model class is empty. We do not have to explicitly tell the Eloquent model which table it corresponds to because it will assume the database table is the plural form of the model name. So, in this case, the `Task` model is assumed to correspond with the `tasks` database table. Here is what our empty model should look like:
 
+
 ```
-<?phpnamespace App;use Illuminate\Database\Eloquent\Model;class Task extends Model{    //}
+
+<?php
+ 
+namespace App;
+ 
+use Illuminate\Database\Eloquent\Model;
+ 
+class Task extends Model
+{
+    //
+}
 ```
 
 We'll learn more about how to use Eloquent models as we add routes to our application. Of course, feel free to consult the [complete Eloquent documentation](https://laravel.com/docs/5.1/eloquent) for more information.
@@ -73,7 +115,31 @@ Next, we're ready to add a few routes to our application. Routes are used to poi
 For this application, we know we will need at least three routes: a route to display a list of all of our tasks, a route to add new tasks, and a route to delete existing tasks. So, let's stub all of these routes in the `app/Http/routes.php` file:
 
 ```
-<?phpuse App\Task;use Illuminate\Http\Request;/** * Display All Tasks */Route::get('/', function () {    //});/** * Add A New Task */Route::post('/task', function (Request $request) {    //});/** * Delete An Existing Task */Route::delete('/task/{id}', function ($id) {    //});
+<?php
+ 
+use App\Task;
+use Illuminate\Http\Request;
+ 
+/**
+ * Display All Tasks
+ */
+Route::get('/', function () {
+    //
+});
+ 
+/**
+ * Add A New Task
+ */
+Route::post('/task', function (Request $request) {
+    //
+});
+ 
+/**
+ * Delete An Existing Task
+ */
+Route::delete('/task/{id}', function ($id) {
+    //
+});
 ```
 
 ### [Displaying A View](#displaying-a-view)
@@ -83,7 +149,9 @@ Next, let's fill out our `/` route. From this route, we want to render an HTML t
 In Laravel, all HTML templates are stored in the `resources/views` directory, and we can use the `view` helper to return one of these templates from our route:
 
 ```
-Route::get('/', function () {    return view('tasks');});
+Route::get('/', function () {
+    return view('tasks');
+});
 ```
 
 Of course, we need to actually define this view, so let's do that now!
@@ -103,7 +171,26 @@ As we discussed earlier, all Laravel views are stored in `resources/views`. So, 
 Our `app.blade.php` view should look like the following:
 
 ```
-// resources/views/layouts/app.blade.php<!DOCTYPE html><html lang="en">    <head>        <title>Laravel Quickstart - Basic</title>        <!-- CSS And JavaScript -->    </head>    <body>        <div class="container">            <nav class="navbar navbar-default">                <!-- Navbar Contents -->            </nav>        </div>        @yield('content')    </body></html>
+// resources/views/layouts/app.blade.php
+ 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Laravel Quickstart - Basic</title>
+ 
+        <!-- CSS And JavaScript -->
+    </head>
+ 
+    <body>
+        <div class="container">
+            <nav class="navbar navbar-default">
+                <!-- Navbar Contents -->
+            </nav>
+        </div>
+ 
+        @yield('content')
+    </body>
+</html>
 ```
 
 Note the `@yield('content')` portion of the layout. This is a special Blade directive that specifies where all child pages that extend the layout can inject their own content. Next, let's define the child view that will use this layout and provide its primary content.
@@ -115,7 +202,44 @@ Great, our application layout is finished. Next, we need to define a view that c
 We'll skip over some of the Bootstrap CSS boilerplate and only focus on the things that matter. Remember, you can download the full source for this application on [GitHub](https://github.com/laravel/quickstart-basic):
 
 ```
-// resources/views/tasks.blade.php@extends('layouts.app')@section('content')    <!-- Bootstrap Boilerplate... -->    <div class="panel-body">        <!-- Display Validation Errors -->        @include('common.errors')        <!-- New Task Form -->        <form action="/task" method="POST" class="form-horizontal">            {{ csrf_field() }}            <!-- Task Name -->            <div class="form-group">                <label for="task" class="col-sm-3 control-label">Task</label>                <div class="col-sm-6">                    <input type="text" name="name" id="task-name" class="form-control">                </div>            </div>            <!-- Add Task Button -->            <div class="form-group">                <div class="col-sm-offset-3 col-sm-6">                    <button type="submit" class="btn btn-default">                        <i class="fa fa-plus"></i> Add Task                    </button>                </div>            </div>        </form>    </div>    <!-- TODO: Current Tasks -->@endsection
+// resources/views/tasks.blade.php
+ 
+@extends('layouts.app')
+ 
+@section('content')
+ 
+    <!-- Bootstrap Boilerplate... -->
+ 
+    <div class="panel-body">
+        <!-- Display Validation Errors -->
+        @include('common.errors')
+ 
+        <!-- New Task Form -->
+        <form action="/task" method="POST" class="form-horizontal">
+            {{ csrf_field() }}
+ 
+            <!-- Task Name -->
+            <div class="form-group">
+                <label for="task" class="col-sm-3 control-label">Task</label>
+ 
+                <div class="col-sm-6">
+                    <input type="text" name="name" id="task-name" class="form-control">
+                </div>
+            </div>
+ 
+            <!-- Add Task Button -->
+            <div class="form-group">
+                <div class="col-sm-offset-3 col-sm-6">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fa fa-plus"></i> Add Task
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+ 
+    <!-- TODO: Current Tasks -->
+@endsection
 ```
 
 #### A Few Notes Of Explanation
@@ -125,7 +249,9 @@ Before moving on, let's talk about this template a bit. First, the `@extends` di
 Now we have defined a basic layout and view for our application. Remember, we are returning this view from our `/` route like so:
 
 ```
-Route::get('/', function () {    return view('tasks');});
+Route::get('/', function () {
+    return view('tasks');
+});
 ```
 
 Next, we're ready to add code to our `POST /task` route to handle the incoming form input and add a new task to the database.
@@ -141,7 +267,19 @@ Now that we have a form in our view, we need to add code to our `POST /task` rou
 For this form, we will make the `name` field required and state that it must contain less than `255` characters. If the validation fails, we will redirect the user back to the `/` URL, as well as flash the old input and errors into the [session](https://laravel.com/docs/5.1/session):
 
 ```
-Route::post('/task', function (Request $request) {    $validator = Validator::make($request->all(), [        'name' => 'required|max:255',    ]);    if ($validator->fails()) {        return redirect('/')            ->withInput()            ->withErrors($validator);    }    // Create The Task...});
+Route::post('/task', function (Request $request) {
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|max:255',
+    ]);
+ 
+    if ($validator->fails()) {
+        return redirect('/')
+            ->withInput()
+            ->withErrors($validator);
+    }
+ 
+    // Create The Task...
+});
 ```
 
 #### The `$errors` Variable
@@ -151,7 +289,22 @@ Let's take a break for a moment to talk about the `->withErrors($validator)` por
 Remember that we used the `@include('common.errors')` directive within our view to render the form's validation errors. The `common.errors` will allow us to easily show validation errors in the same format across all of our pages. Let's define the contents of this view now:
 
 ```
-// resources/views/common/errors.blade.php@if (count($errors) > 0)    <!-- Form Error List -->    <div class="alert alert-danger">        <strong>Whoops! Something went wrong!</strong>        <br><br>        <ul>            @foreach ($errors->all() as $error)                <li>{{ $error }}</li>            @endforeach        </ul>    </div>@endif
+// resources/views/common/errors.blade.php
+ 
+@if (count($errors) > 0)
+    <!-- Form Error List -->
+    <div class="alert alert-danger">
+        <strong>Whoops! Something went wrong!</strong>
+ 
+        <br><br>
+ 
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 ```
 
 > **Note:** The `$errors` variable is available in **every** Laravel view. It will simply be an empty instance of `ViewErrorBag` if no validation errors are present.
@@ -161,7 +314,23 @@ Remember that we used the `@include('common.errors')` directive within our view 
 Now that input validation is handled, let's actually create a new task by continuing to fill out our route. Once the new task has been created, we will redirect the user back to the `/` URL. To create the task, we may use the `save` method after creating and setting properties on a new Eloquent model:
 
 ```
-Route::post('/task', function (Request $request) {    $validator = Validator::make($request->all(), [        'name' => 'required|max:255',    ]);    if ($validator->fails()) {        return redirect('/')            ->withInput()            ->withErrors($validator);    }    $task = new Task;    $task->name = $request->name;    $task->save();    return redirect('/');});
+Route::post('/task', function (Request $request) {
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|max:255',
+    ]);
+ 
+    if ($validator->fails()) {
+        return redirect('/')
+            ->withInput()
+            ->withErrors($validator);
+    }
+ 
+    $task = new Task;
+    $task->name = $request->name;
+    $task->save();
+ 
+    return redirect('/');
+});
 ```
 
 Great! We can now successfully create tasks. Next, let's continue adding to our view by building a list of all existing tasks.
@@ -171,13 +340,59 @@ Great! We can now successfully create tasks. Next, let's continue adding to our 
 First, we need to edit our `/` route to pass all of the existing tasks to the view. The `view` function accepts a second argument which is an array of data that will be made available to the view, where each key in the array will become a variable within the view:
 
 ```
-Route::get('/', function () {    $tasks = Task::orderBy('created_at', 'asc')->get();    return view('tasks', [        'tasks' => $tasks    ]);});
+Route::get('/', function () {
+    $tasks = Task::orderBy('created_at', 'asc')->get();
+ 
+    return view('tasks', [
+        'tasks' => $tasks
+    ]);
+});
 ```
 
 Once the data is passed, we can spin through the tasks in our `tasks.blade.php` view and display them in a table. The `@foreach` Blade construct allows us to write concise loops that compile down into blazing fast plain PHP code:
 
 ```
-@extends('layouts.app')@section('content')    <!-- Create Task Form... -->    <!-- Current Tasks -->    @if (count($tasks) > 0)        <div class="panel panel-default">            <div class="panel-heading">                Current Tasks            </div>            <div class="panel-body">                <table class="table table-striped task-table">                    <!-- Table Headings -->                    <thead>                        <th>Task</th>                        <th>&nbsp;</th>                    </thead>                    <!-- Table Body -->                    <tbody>                        @foreach ($tasks as $task)                            <tr>                                <!-- Task Name -->                                <td class="table-text">                                    <div>{{ $task->name }}</div>                                </td>                                <td>                                    <!-- TODO: Delete Button -->                                </td>                            </tr>                        @endforeach                    </tbody>                </table>            </div>        </div>    @endif@endsection
+@extends('layouts.app')
+ 
+@section('content')
+    <!-- Create Task Form... -->
+ 
+    <!-- Current Tasks -->
+    @if (count($tasks) > 0)
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Current Tasks
+            </div>
+ 
+            <div class="panel-body">
+                <table class="table table-striped task-table">
+ 
+                    <!-- Table Headings -->
+                    <thead>
+                        <th>Task</th>
+                        <th>&nbsp;</th>
+                    </thead>
+ 
+                    <!-- Table Body -->
+                    <tbody>
+                        @foreach ($tasks as $task)
+                            <tr>
+                                <!-- Task Name -->
+                                <td class="table-text">
+                                    <div>{{ $task->name }}</div>
+                                </td>
+ 
+                                <td>
+                                    <!-- TODO: Delete Button -->
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    @endif
+@endsection
 ```
 
 Our task application is almost complete. But, we have no way to delete our existing tasks when they're done. Let's add that next!
@@ -189,7 +404,22 @@ Our task application is almost complete. But, we have no way to delete our exist
 We left a "TODO" note in our code where our delete button is supposed to be. So, let's add a delete button to each row of our task listing within the `tasks.blade.php` view. We'll create a small single-button form for each task in the list. When the button is clicked, a `DELETE /task` request will be sent to the application:
 
 ```
-<tr>    <!-- Task Name -->    <td class="table-text">        <div>{{ $task->name }}</div>    </td>    <!-- Delete Button -->    <td>        <form action="/task/{{ $task->id }}" method="POST">            {{ csrf_field() }}            {{ method_field('DELETE') }}            <button>Delete Task</button>        </form>    </td></tr>
+<tr>
+    <!-- Task Name -->
+    <td class="table-text">
+        <div>{{ $task->name }}</div>
+    </td>
+ 
+    <!-- Delete Button -->
+    <td>
+        <form action="/task/{{ $task->id }}" method="POST">
+            {{ csrf_field() }}
+            {{ method_field('DELETE') }}
+ 
+            <button>Delete Task</button>
+        </form>
+    </td>
+</tr>
 ```
 
 #### [A Note On Method Spoofing](#a-note-on-method-spoofing)
@@ -207,5 +437,9 @@ We can spoof a `DELETE` request by outputting the results of the `method_field('
 Finally, let's add logic to our route to actually delete the given task. We can use the Eloquent `findOrFail` method to retrieve a model by ID or throw a 404 exception if the model does not exist. Once we retrieve the model, we will use the `delete` method to delete the record. Once the record is deleted, we will redirect the user back to the `/` URL:
 
 ```
-Route::delete('/task/{id}', function ($id) {    Task::findOrFail($id)->delete();    return redirect('/');});
+Route::delete('/task/{id}', function ($id) {
+    Task::findOrFail($id)->delete();
+ 
+    return redirect('/');
+});
 ```
