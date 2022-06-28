@@ -7,6 +7,7 @@
   - [Installing gh on Linux](#installing-gh-on-linux)
   - [Authenticate gh and git with GitHub](#authenticate-gh-and-git-with-github)
   - [Add SSH key to GitHub](#add-ssh-key-to-github)
+- [Prepping The Local](#prepping-the-local)
 - [Prepping The Database](#prepping-the-database)
   - [Database Migrations](#database-migrations)
   - [Eloquent Models](#eloquent-models)
@@ -122,6 +123,10 @@ gh ssh-key add /home/user/.ssh/id_algorithm.pub
 ```
 
 > **Note:** Now you can clone this repository 😁
+
+## [Prepping The Local](#prepping-the-local)
+
+> **Note:** TBD
 
 ## [Prepping The Database](#prepping-the-database)
 
