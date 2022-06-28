@@ -1,31 +1,31 @@
 ## Basic Task List
 
--   [Introduction](https://laravel.com/docs/5.1/quickstart#introduction)
--   [Installation](https://laravel.com/docs/5.1/quickstart#installation)
--   [Prepping The Database](https://laravel.com/docs/5.1/quickstart#prepping-the-database)
-    -   [Database Migrations](https://laravel.com/docs/5.1/quickstart#database-migrations)
-    -   [Eloquent Models](https://laravel.com/docs/5.1/quickstart#eloquent-models)
--   [Routing](https://laravel.com/docs/5.1/quickstart#routing)
-    -   [Stubbing The Routes](https://laravel.com/docs/5.1/quickstart#stubbing-the-routes)
-    -   [Displaying A View](https://laravel.com/docs/5.1/quickstart#displaying-a-view)
--   [Building Layouts & Views](https://laravel.com/docs/5.1/quickstart#building-layouts-and-views)
-    -   [Defining The Layout](https://laravel.com/docs/5.1/quickstart#defining-the-layout)
-    -   [Defining The Child View](https://laravel.com/docs/5.1/quickstart#defining-the-child-view)
--   [Adding Tasks](https://laravel.com/docs/5.1/quickstart#adding-tasks)
-    -   [Validation](https://laravel.com/docs/5.1/quickstart#validation)
-    -   [Creating The Task](https://laravel.com/docs/5.1/quickstart#creating-the-task)
-    -   [Displaying Existing Tasks](https://laravel.com/docs/5.1/quickstart#displaying-existing-tasks)
--   [Deleting Tasks](https://laravel.com/docs/5.1/quickstart#deleting-tasks)
-    -   [Adding The Delete Button](https://laravel.com/docs/5.1/quickstart#adding-the-delete-button)
-    -   [Deleting The Task](https://laravel.com/docs/5.1/quickstart#deleting-the-task)
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Prepping The Database](#prepping-the-database)
+  - [Database Migrations](#database-migrations)
+  - [Eloquent Models](#eloquent-models)
+- [Routing](#routing)
+  - [Stubbing The Routes](#stubbing-the-routes)
+  - [Displaying A View](#displaying-a-view)
+- [Building Layouts & Views](#building-layouts-and-views)
+  - [Defining The Layout](#defining-the-layout)
+  - [Defining The Child View](#defining-the-child-view)
+- [Adding Tasks](#adding-tasks)
+  - [Validation](#validation)
+  - [Creating The Task](#creating-the-task)
+  - [Displaying Existing Tasks](#displaying-existing-tasks)
+- [Deleting Tasks](#deleting-tasks)
+  - [Adding The Delete Button](#adding-the-delete-button)
+  - [Deleting The Task](#deleting-the-task)
 
-## [Introduction](https://laravel.com/docs/5.1/quickstart#introduction)
+## [Introduction](#introduction)
 
 This quickstart guide provides a basic introduction to the Laravel framework and includes content on database migrations, the Eloquent ORM, routing, validation, views, and Blade templates. This is a great starting point if you are brand new to the Laravel framework or PHP frameworks in general. If you have already used Laravel or other PHP frameworks, you may wish to consult one of our more advanced quickstarts.
 
 To sample a basic selection of Laravel features, we will build a simple task list we can use to track all of the tasks we want to accomplish (the typical "to-do list" example). The complete, finished source code for this project is [available on GitHub](http://github.com/laravel/quickstart-basic).
 
-## [Installation](https://laravel.com/docs/5.1/quickstart#installation)
+## [Installation](#installation)
 
 Of course, first you will need a fresh installation of the Laravel framework. You may use the [Homestead virtual machine](https://laravel.com/docs/5.1/homestead) or the local PHP environment of your choice to run the framework. Once your local environment is ready, you may install the Laravel framework using Composer:
 
@@ -41,9 +41,9 @@ git clone https://github.com/laravel/quickstart-basic quickstartcd quickstartcom
 
 For more complete documentation on building a local Laravel development environment, check out the full [Homestead](https://laravel.com/docs/5.1/homestead) and [installation](https://laravel.com/docs/5.1/installation) documentation.
 
-## [Prepping The Database](https://laravel.com/docs/5.1/quickstart#prepping-the-database)
+## [Prepping The Database](#prepping-the-database)
 
-### [Database Migrations](https://laravel.com/docs/5.1/quickstart#database-migrations)
+### [Database Migrations](#database-migrations)
 
 First, let's use a migration to define a database table to hold all of our tasks. Laravel's database migrations provide an easy way to define your database table structure and modifications using fluent, expressive PHP code. Instead of telling your team members to manually add columns to their local copy of the database, your teammates can simply run the migrations you push into source control.
 
@@ -63,7 +63,7 @@ To run our migration, we will use the `migrate` Artisan command. If you are usin
 
 This command will create all of our database tables. If you inspect the database tables using the database client of your choice, you should see a new `tasks` table which contains the columns defined in our migration. Next, we're ready to define an Eloquent ORM model for our tasks!
 
-### [Eloquent Models](https://laravel.com/docs/5.1/quickstart#eloquent-models)
+### [Eloquent Models](#eloquent-models)
 
 [Eloquent](https://laravel.com/docs/5.1/eloquent) is Laravel's default ORM (object-relational mapper). Eloquent makes it painless to retrieve and store data in your database using clearly defined "models". Usually, each Eloquent model corresponds directly with a single database table.
 
@@ -81,9 +81,9 @@ The model will be placed in the `app` directory of your application. By default,
 
 We'll learn more about how to use Eloquent models as we add routes to our application. Of course, feel free to consult the [complete Eloquent documentation](https://laravel.com/docs/5.1/eloquent) for more information.
 
-## [Routing](https://laravel.com/docs/5.1/quickstart#routing)
+## [Routing](#routing)
 
-### [Stubbing The Routes](https://laravel.com/docs/5.1/quickstart#stubbing-the-routes)
+### [Stubbing The Routes](#stubbing-the-routes)
 
 Next, we're ready to add a few routes to our application. Routes are used to point URLs to controllers or anonymous functions that should be executed when a user accesses a given page. By default, all Laravel routes are defined in the `app/Http/routes.php` file that is included in every new project.
 
@@ -93,7 +93,7 @@ For this application, we know we will need at least three routes: a route to dis
 <?phpuse App\Task;use Illuminate\Http\Request;/** * Display All Tasks */Route::get('/', function () {    //});/** * Add A New Task */Route::post('/task', function (Request $request) {    //});/** * Delete An Existing Task */Route::delete('/task/{id}', function ($id) {    //});
 ```
 
-### [Displaying A View](https://laravel.com/docs/5.1/quickstart#displaying-a-view)
+### [Displaying A View](#displaying-a-view)
 
 Next, let's fill out our `/` route. From this route, we want to render an HTML template that contains a form to add new tasks, as well as a list of all current tasks.
 
@@ -105,13 +105,13 @@ Route::get('/', function () {    return view('tasks');});
 
 Of course, we need to actually define this view, so let's do that now!
 
-## [Building Layouts & Views](https://laravel.com/docs/5.1/quickstart#building-layouts-and-views)
+## [Building Layouts & Views](#building-layouts-and-views)
 
 This application only has a single view which contains a form for adding new tasks as well as a listing of all current tasks. To help you visualize the view, here is a screenshot of the finished application with basic Bootstrap CSS styling applied:
 
 ![Application Image](https://laravel.com/assets/img/quickstart/basic-overview.png)
 
-### [Defining The Layout](https://laravel.com/docs/5.1/quickstart#defining-the-layout)
+### [Defining The Layout](#defining-the-layout)
 
 Almost all web applications share the same layout across pages. For example, this application has a top navigation bar that would be typically present on every page (if we had more than one). Laravel makes it easy to share these common features across every page using Blade **layouts**.
 
@@ -125,7 +125,7 @@ Our `app.blade.php` view should look like the following:
 
 Note the `@yield('content')` portion of the layout. This is a special Blade directive that specifies where all child pages that extend the layout can inject their own content. Next, let's define the child view that will use this layout and provide its primary content.
 
-### [Defining The Child View](https://laravel.com/docs/5.1/quickstart#defining-the-child-view)
+### [Defining The Child View](#defining-the-child-view)
 
 Great, our application layout is finished. Next, we need to define a view that contains a form to create a new task as well as a table that lists all existing tasks. Let's define this view in `resources/views/tasks.blade.php`.
 
@@ -149,9 +149,9 @@ Next, we're ready to add code to our `POST /task` route to handle the incoming f
 
 > **Note:** The `@include('common.errors')` directive will load the template located at `resources/views/common/errors.blade.php`. We haven't defined this template, but we will soon!
 
-## [Adding Tasks](https://laravel.com/docs/5.1/quickstart#adding-tasks)
+## [Adding Tasks](#adding-tasks)
 
-### [Validation](https://laravel.com/docs/5.1/quickstart#validation)
+### [Validation](#validation)
 
 Now that we have a form in our view, we need to add code to our `POST /task` route to validate the incoming form input and create a new task. First, let's validate the input.
 
@@ -173,7 +173,7 @@ Remember that we used the `@include('common.errors')` directive within our view 
 
 > **Note:** The `$errors` variable is available in **every** Laravel view. It will simply be an empty instance of `ViewErrorBag` if no validation errors are present.
 
-### [Creating The Task](https://laravel.com/docs/5.1/quickstart#creating-the-task)
+### [Creating The Task](#creating-the-task)
 
 Now that input validation is handled, let's actually create a new task by continuing to fill out our route. Once the new task has been created, we will redirect the user back to the `/` URL. To create the task, we may use the `save` method after creating and setting properties on a new Eloquent model:
 
@@ -183,7 +183,7 @@ Route::post('/task', function (Request $request) {    $validator = Validator::ma
 
 Great! We can now successfully create tasks. Next, let's continue adding to our view by building a list of all existing tasks.
 
-### [Displaying Existing Tasks](https://laravel.com/docs/5.1/quickstart#displaying-existing-tasks)
+### [Displaying Existing Tasks](#displaying-existing-tasks)
 
 First, we need to edit our `/` route to pass all of the existing tasks to the view. The `view` function accepts a second argument which is an array of data that will be made available to the view, where each key in the array will become a variable within the view:
 
@@ -199,9 +199,9 @@ Once the data is passed, we can spin through the tasks in our `tasks.blade.php` 
 
 Our task application is almost complete. But, we have no way to delete our existing tasks when they're done. Let's add that next!
 
-## [Deleting Tasks](https://laravel.com/docs/5.1/quickstart#deleting-tasks)
+## [Deleting Tasks](#deleting-tasks)
 
-### [Adding The Delete Button](https://laravel.com/docs/5.1/quickstart#adding-the-delete-button)
+### [Adding The Delete Button](#adding-the-delete-button)
 
 We left a "TODO" note in our code where our delete button is supposed to be. So, let's add a delete button to each row of our task listing within the `tasks.blade.php` view. We'll create a small single-button form for each task in the list. When the button is clicked, a `DELETE /task` request will be sent to the application:
 
@@ -209,7 +209,7 @@ We left a "TODO" note in our code where our delete button is supposed to be. So,
 <tr>    <!-- Task Name -->    <td class="table-text">        <div>{{ $task->name }}</div>    </td>    <!-- Delete Button -->    <td>        <form action="/task/{{ $task->id }}" method="POST">            {{ csrf_field() }}            {{ method_field('DELETE') }}            <button>Delete Task</button>        </form>    </td></tr>
 ```
 
-#### [A Note On Method Spoofing](https://laravel.com/docs/5.1/quickstart#a-note-on-method-spoofing)
+#### [A Note On Method Spoofing](#a-note-on-method-spoofing)
 
 Note that the delete button's form `method` is listed as `POST`, even though we are responding to the request using a `Route::delete` route. HTML forms only allow the `GET` and `POST` HTTP verbs, so we need a way to spoof a `DELETE` request from the form.
 
@@ -219,7 +219,7 @@ We can spoof a `DELETE` request by outputting the results of the `method_field('
 <input type="hidden" name="_method" value="DELETE">
 ```
 
-### [Deleting The Task](https://laravel.com/docs/5.1/quickstart#deleting-the-task)
+### [Deleting The Task](#deleting-the-task)
 
 Finally, let's add logic to our route to actually delete the given task. We can use the Eloquent `findOrFail` method to retrieve a model by ID or throw a 404 exception if the model does not exist. Once we retrieve the model, we will use the `delete` method to delete the record. Once the record is deleted, we will redirect the user back to the `/` URL:
 
