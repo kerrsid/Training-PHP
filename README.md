@@ -1,6 +1,12 @@
 ## Basic Task List
 
 - [Introduction](#introduction)
+- [Adding a new SSH key to your GitHub account](#adding-a-new-ssh-key-to-your-github-account)
+  - [About SSH key generation](#about-ssh-key-generation)
+  - [Generating a new SSH key](#generating-a-new-ssh-key) 
+  - [Installing gh on Linux](#installing-gh-on-linux)
+  - [Authenticate gh and git with GitHub](#authenticate-gh-and-git-with-github)
+  - [Add SSH key to GitHub](#add-ssh-key-to-github)
 - [Prepping The Database](#prepping-the-database)
   - [Database Migrations](#database-migrations)
   - [Eloquent Models](#eloquent-models)
@@ -23,6 +29,99 @@
 This quickstart guide provides a basic introduction to the Laravel framework and includes content on database migrations, the Eloquent ORM, routing, validation, views, and Blade templates. This is a great starting point if you are brand new to the Laravel framework or PHP frameworks in general. If you have already used Laravel or other PHP frameworks, you may wish to consult one of our more advanced quickstarts.
 
 To sample a basic selection of Laravel features, we will build a simple task list we can use to track all of the tasks we want to accomplish (the typical "to-do list" example). The complete, finished source code for this project is [available on GitHub](http://github.com/laravel/quickstart-basic).
+
+## [Adding a new SSH key to your GitHub account](#adding-a-new-ssh-key-to-your-github-account)
+### [About SSH key generation](#about-ssh-key-generation)
+
+If you don't already have an SSH key, you must generate a new SSH key to use for authentication. If you're unsure whether you already have an SSH key, you can check for existing keys. For more information, see "[Checking for existing SSH keys](https://docs.github.com/en/github/authenticating-to-github/checking-for-existing-ssh-keys)."
+
+If you want to use a hardware security key to authenticate to GitHub, you must generate a new SSH key for your hardware security key. You must connect your hardware security key to your computer when you authenticate with the key pair. For more information, see the [OpenSSH 8.2 release notes](https://www.openssh.com/txt/release-8.2).
+
+If you don't want to reenter your passphrase every time you use your SSH key, you can add your key to the SSH agent, which manages your SSH keys and remembers your passphrase.
+
+### [Generating a new SSH key](#generating-a-new-ssh-key)
+1. Open Terminal.
+
+```bash
+su user
+```
+
+2. Paste the text below, substituting in your GitHub email address.
+
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+This creates a new SSH key, using the provided email as a label.
+
+```bash
+> Generating public/private algorithm key pair.
+```
+
+1. When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.
+
+```bash
+> Enter a file in which to save the key (/home/user/.ssh/id_algorithm):[Press enter]
+```
+
+2. At the prompt, type a secure passphrase. For more information, see ["Working with SSH key passphrases](https://docs.github.com/en/articles/working-with-ssh-key-passphrases)."
+
+```bash
+> Enter passphrase (empty for no passphrase): [Press enter]
+> Enter same passphrase again: [Press enter]
+```
+
+### [Installing gh on Linux](#installing-gh-on-linux)
+
+Packages downloaded from https://cli.github.com or from https://github.com/cli/cli/releases are considered official binaries. We focus on popular Linux distros and the following CPU architectures: `i386`, `amd64`, `arm64`, `armhf`.
+
+### Debian, Ubuntu Linux
+
+Install:
+
+```bash
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update
+sudo apt install gh
+```
+
+Upgrade:
+
+```bash
+sudo apt update
+sudo apt install gh
+```
+
+### [Authenticate gh and git with GitHub](#authenticate-gh-and-git-with-github)
+```bash
+gh auth login
+```
+
+```bash
+? What account do you want to log into?  [Use arrows to move, type to filter]
+> GitHub.com [Press Enter]
+  GitHub Enterprise Server
+
+? What is your preferred protocol for Git operations?  [Use arrows to move, type to filter]
+> HTTPS [Press Enter]
+  SSH
+
+? How would you like to authenticate GitHub CLI?  [Use arrows to move, type to filter]
+> Login with a web browser [Press Enter]
+  Paste an authentication token
+
+! First copy your one-time code: BE41-264F
+Press Enter to open github.com in your browser... 
+```
+### [Add SSH key to GitHub](#add-ssh-key-to-github)
+
+```bash
+gh ssh-key add /home/user/.ssh/id_algorithm.pub
+```
+
+> **Note:** Now you can clone this repository 😁
 
 ## [Prepping The Database](#prepping-the-database)
 
