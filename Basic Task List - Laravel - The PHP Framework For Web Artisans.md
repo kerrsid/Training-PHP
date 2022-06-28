@@ -1,11 +1,3 @@
-Version
-
-![](https://laravel.com/img/icons/drop_arrow.min.svg) ![](https://laravel.com/img/icons/drop_arrow.dark.min.svg)
-
-> ![Icon](https://laravel.com/img/callouts/exclamation.min.svg)
-> 
-> **WARNING** You're browsing the documentation for an old version of Laravel. Consider upgrading your project to [Laravel 9.x](https://laravel.com/docs/9.x).
-
 ## Basic Task List
 
 -   [Introduction](https://laravel.com/docs/5.1/quickstart#introduction)
