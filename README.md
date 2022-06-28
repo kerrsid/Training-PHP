@@ -1,7 +1,6 @@
 ## Basic Task List
 
 - [Introduction](#introduction)
-- [Installation](#installation)
 - [Prepping The Database](#prepping-the-database)
   - [Database Migrations](#database-migrations)
   - [Eloquent Models](#eloquent-models)
@@ -24,22 +23,6 @@
 This quickstart guide provides a basic introduction to the Laravel framework and includes content on database migrations, the Eloquent ORM, routing, validation, views, and Blade templates. This is a great starting point if you are brand new to the Laravel framework or PHP frameworks in general. If you have already used Laravel or other PHP frameworks, you may wish to consult one of our more advanced quickstarts.
 
 To sample a basic selection of Laravel features, we will build a simple task list we can use to track all of the tasks we want to accomplish (the typical "to-do list" example). The complete, finished source code for this project is [available on GitHub](http://github.com/laravel/quickstart-basic).
-
-## [Installation](#installation)
-
-Of course, first you will need a fresh installation of the Laravel framework. You may use the [Homestead virtual machine](https://laravel.com/docs/5.1/homestead) or the local PHP environment of your choice to run the framework. Once your local environment is ready, you may install the Laravel framework using Composer:
-
-```
-composer create-project laravel/laravel quickstart --prefer-dist
-```
-
-You're free to just read along for the remainder of this quickstart; however, if you would like to download the source code for this quickstart and run it on your local machine, you may clone its Git repository and install its dependencies:
-
-```
-git clone https://github.com/laravel/quickstart-basic quickstartcd quickstartcomposer installphp artisan migrate
-```
-
-For more complete documentation on building a local Laravel development environment, check out the full [Homestead](https://laravel.com/docs/5.1/homestead) and [installation](https://laravel.com/docs/5.1/installation) documentation.
 
 ## [Prepping The Database](#prepping-the-database)
 
