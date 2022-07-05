@@ -125,9 +125,50 @@ gh ssh-key add /home/user/.ssh/id_algorithm.pub
 > **Note:** Now you can clone this repository 😁
 
 ## [Preparing The Local](#preparing-the-local)
+Run ```bash composer install``` followed by ```bash npm install```
 
-> **Note:** TBD
+You have to change folder ownership and rights to avoid access errors with the following commands (changing `user` to your current user)
+```bash
+sudo chown -R www-data:user storage 
+sudo chown -R www-data:user storage/*
+sudo chown -R www-data:user storage/**/*
+sudo chmod -R 774 storage
+sudo chmod -R 774 storage/*
+sudo chmod -R 774 storage/**/*
+sudo chown -R www-data:user bootstrap
+sudo chown -R www-data:user boostrap/*
+sudo chown -R www-data:user bootstrap/**/*
+sudo chmod -R 774 bootstrap
+sudo chmod -R 774 boostrap/*
+sudo chmod -R 774 bootstrap/**/*
+```
+Copy and paste ```.env.example``` and rename it to ```.env``` and then use the following command to
+generate .env app_key
+``` php artisan key:generate```.
 
+Then we must change the DB variables to our actual ones for it to link to the DB.
+For the apache2 config we must create a new .conf file inside /etc/apache2/sites-available with ``` sudo touch training-php.conf```.
+After which we enter the newly made configuration file and add the following
+```
+<VirtualHost *:80>
+        ServerName training-php.local
+
+        DocumentRoot "/pathParentDirectoryProject/public"
+        <Directory "/pathParentDirectoryProject/public">
+            Options Indexes FollowSymLinks MultiViews
+            AllowOverride All
+            Require all granted
+            Order deny,allow
+            Allow from all
+        </Directory>
+
+        ErrorLog /var/log/apache2/training-php.err
+        CustomLog /var/log/apache2/training-php combined
+</VirtualHost>
+```
+``` pathParentDirectory ``` being your local path
+
+To enable it we use ``` sudo a2ensite ``` after which we reload the apache2 service ``` sudo service apache2 reload ```
 ## [Preparing The Database](#preparing-the-database)
 
 ### [Database Migrations](#database-migrations)
