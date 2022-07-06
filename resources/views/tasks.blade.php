@@ -57,13 +57,14 @@
                         <table class="table table-striped task-table">
                             <thead>
                                 <th>Task</th>
+                                <th>Notes</th>
                                 <th style="white-space: nowrap;">&nbsp;</th>
                             </thead>
                             <tbody>
                                 @foreach ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
-
+                                        <td class="table-text"><div>{{ strlen($task->notes) > 20 ?  substr($task->notes, 0, 20)  . '...' : $task->notes }}</div></td>
                                         <!-- Task Delete Button -->
                                         <td class="d-flex">
                                             <form action="{{ url('task/'.$task->id.'/delete') }}" class="m-2" method="POST">
@@ -98,7 +99,7 @@
                                                             <div class="col-md-12">
                                                                 <div class="form-group">
                                                                     <label for="task-name">Title</label>
-                                                                    <input type="text" name="name" id="task-name" class="form-control" placeholder="Title" value="{{ $task->name }}" required>
+                                                                    <input type="text" name="name" id="task-name" class="form-control" placeholder="Title" value="{{ $task->name }}">
                                                                 </div>
                                                             </div>
                                                         </div>
