@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Task;
 use Illuminate\Support\Facades\Validator;
 
-class ControllerTask extends Controller
+class TaskController extends Controller
 {
     public function list()
     {
@@ -28,6 +28,11 @@ class ControllerTask extends Controller
                 ]);
         
                 if ($validator->fails()) {
+                    if($id != 0){
+                        // var_dump($validator);
+                        // exit();
+                        return back()->withInput()->withErrors($validator);
+                    }
                     return redirect('/')
                         ->withInput()
                         ->withErrors($validator);
