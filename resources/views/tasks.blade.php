@@ -64,7 +64,8 @@
                                 @foreach ($tasks as $task)
                                     <tr>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
-                                        <td class="table-text"><div>{{ strlen($task->notes) > 20 ?  substr($task->notes, 0, 20)  . '...' : $task->notes }}</div></td>
+                                        <td class="table-text"><div>{{ strlen($task->notes) > 20 ? 
+                                                substr($task->notes, 0, 20) . '...' : $task->notes }}</div></td>
                                         <!-- Task Delete Button -->
                                         <td class="d-flex">
                                             <form action="{{ url('task/'.$task->id.'/delete') }}" class="m-2" method="POST">
