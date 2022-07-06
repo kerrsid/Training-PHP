@@ -11,71 +11,16 @@
 |
 */
 
-use App\Task;
+use App\Models\Task;
 use Illuminate\Http\Request;
 
 Route::group(['middleware' => ['web']], function () {
-    /**
-     * Show Task Dashboard
-     */
-    Route::get('/', function () {
-        return view('tasks', [
-            'tasks' => Task::orderBy('created_at', 'asc')->get()
-        ]);
-    });
-
-    /**
-     * Add New Task
-     */
-    Route::post('/task', function (Request $request) {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'notes' => 'required|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('/')
-                ->withInput()
-                ->withErrors($validator);
-        }
-
-        $task = new Task;
-        $task->name = $request->name;
-        $task->notes = $request->notes;
-        $task->save();
-
-        return redirect('/');
-    });
-
-    /**
-     * Delete Task
-     */
-    Route::delete('/task/{id}', function ($id) {
-        Task::findOrFail($id)->delete();
-
-        return redirect('/');
-    });
-
-    Route::patch('/edit/{id}', function($id, Request $request){
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-            'notes' => 'required|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect('/')
-                ->withInput()
-                ->withErrors($validator);
-        }
-
-        $task = Task::find($id);
-        if(!isset($task)){
-            return redirect('/'->previous() . '#modalHeader')->with('success', 'Error while trying to edit task. Task could not be found.');
-        }
-        $task->name = $request->name;
-        $task->notes = $request->notes;
-        $task->save();
-
-        return redirect('/');
-    });
+    // Show task dashboard
+    Route::get('/', 'ControllerTask@list');
+    // Add task
+    Route::post('/task/{id}/{argument}', 'ControllerTask@addEditRemove');
+    // Edit task
+    Route::patch('/task/{id}/{argument}', 'ControllerTask@addEditRemove');
+    // Delete task
+    Route::delete('/task/{id}/{argument}', 'ControllerTask@addEditRemove');
 });

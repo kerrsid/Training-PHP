@@ -11,9 +11,13 @@
                 <div class="panel-body">
                     <!-- Display Validation Errors -->
                     @include('common.errors')
-
+                    @if(session()->has('message') || session()->has('error'))
+                    <div class='{{ session()->get("error") == true ? "alert alert-warning" : "alert alert-success" }}'>
+                        {{ session()->get('message') }}
+                    </div>
+                    @endif
                     <!-- New Task Form -->
-                    <form action="{{ url('task')}}" method="POST" class="form-horizontal">
+                    <form action="{{ url('task/0/edit')}}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
 
                         <!-- Task Name -->
@@ -62,7 +66,7 @@
 
                                         <!-- Task Delete Button -->
                                         <td class="d-flex">
-                                            <form action="{{ url('task/'.$task->id) }}" class="m-2" method="POST">
+                                            <form action="{{ url('task/'.$task->id.'/delete') }}" class="m-2" method="POST">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
 
@@ -78,7 +82,7 @@
                                         </td>
                                     </tr>
                                     <!-- Modal -->
-                                    <form action="{{ url('edit/'.$task->id)}}" method="POST" class="form-horizontal">
+                                    <form action="{{ url('task/'.$task->id.'/edit')}}" method="POST" class="form-horizontal">
                                         {{ csrf_field() }}
                                         {{ method_field('PATCH') }}
                                         <div class="modal fade" id="myModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
