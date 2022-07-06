@@ -11,16 +11,16 @@
 |
 */
 
-use App\Models\Task;
-use Illuminate\Http\Request;
+$router = app("Illuminate\Routing\Router");
 
-Route::group(['middleware' => ['web']], function () {
+$router->group(['middleware' => ['web']], function () use ($router) {
+    $ctrl = 'TaskController';
     // Show task dashboard
-    Route::get('/', 'ControllerTask@list');
+    $router->get('/',                             "{$ctrl}@index")->name('task.index');
     // Add task
-    Route::post('/task/{id}/{argument}', 'ControllerTask@addEditRemove');
+    $router->post('/task/add',                    "{$ctrl}@add")->name('task.add');
     // Edit task
-    Route::patch('/task/{id}/{argument}', 'ControllerTask@addEditRemove');
+    $router->patch('/task/edit/{id}',             "{$ctrl}@edit")->name('task.edit');
     // Delete task
-    Route::delete('/task/{id}/{argument}', 'ControllerTask@addEditRemove');
+    $router->delete('/task/delete/{id}',          "{$ctrl}@delete")->name('task.delete');
 });

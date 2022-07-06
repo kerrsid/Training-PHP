@@ -17,7 +17,7 @@
                     </div>
                     @endif
                     <!-- New Task Form -->
-                    <form action="{{ url('task/0/edit')}}" method="POST" class="form-horizontal">
+                    <form action="{{ route('task.add')}}" method="POST" class="form-horizontal">
                         {{ csrf_field() }}
 
                         <!-- Task Name -->
@@ -68,10 +68,9 @@
                                                 substr($task->notes, 0, 20) . '...' : $task->notes }}</div></td>
                                         <!-- Task Delete Button -->
                                         <td class="d-flex">
-                                            <form action="{{ url('task/'.$task->id.'/delete') }}" class="m-2" method="POST">
+                                            <form action="{{ route('task.delete', $task->id) }}" method="POST" class="m-2">
                                                 {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
-
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
@@ -84,9 +83,6 @@
                                         </td>
                                     </tr>
                                     <!-- Modal -->
-                                    <form action="{{ url('task/'.$task->id.'/edit')}}" method="POST" class="form-horizontal">
-                                        {{ csrf_field() }}
-                                        {{ method_field('PATCH') }}
                                         <div class="modal fade" id="myModal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
@@ -96,31 +92,34 @@
                                                         <h4 class="modal-title" id="myModalLabel">Modal {{ $task->name }}</h4>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label for="task-name">Title</label>
-                                                                    <input type="text" name="name" id="task-name" class="form-control" placeholder="Title" value="{{ $task->name }}">
+                                                        <form action="{{ route('task.edit', $task->id) }}" method="POST" class="form-horizontal">
+                                                        {{ csrf_field() }}
+                                                        {{ method_field('PATCH') }}
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="task-name">Title</label>
+                                                                        <input type="text" name="name" id="task-name" class="form-control" placeholder="Title" value="{{ $task->name }}">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label for="taskNotesModal">Notes</label>
+                                                                        <textarea name="notes" aria-label="Notes" class="form-control" id="taskNotesModal" cols="10" rows="10" style="resize:none;" placeholder="Notes" required>{{ $task->notes }}</textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row">
-                                                            <div class="col-md-12">
-                                                                <div class="form-group">
-                                                                    <label for="taskNotesModal">Notes</label>
-                                                                    <textarea name="notes" aria-label="Notes" class="form-control" id="taskNotesModal" cols="10" rows="10" style="resize:none;" placeholder="Notes" required>{{ $task->notes }}</textarea>
-                                                                </div>
-                                                            </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary">Save changes</button>
                                                         </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-primary">Save changes</button>
-                                                    </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
                                 @endforeach
                             </tbody>
                         </table>
@@ -129,8 +128,4 @@
             @endif
         </div>
     </div>
-@endsection
-@section('scripts')
-<script>
-</script>
 @endsection

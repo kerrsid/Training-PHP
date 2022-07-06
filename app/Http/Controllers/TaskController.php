@@ -11,61 +11,65 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
-    public function list()
+    public function index()
     {
         return view('tasks', [
             'tasks' => Task::orderBy('created_at', 'asc')->get()
         ]);
     }
 
-    public function addEditRemove($id,$argument,Request $request)
+    public function add(Request $request)
     {
-        switch($argument){
-            case 'edit' :
-                $validator = Validator::make($request->all(), [
-                    'name' => 'required|max:255',
-                    'notes' => 'required|max:255',
-                ]);
-        
-                if ($validator->fails()) {
-                    if($id != 0){
-                        // var_dump($validator);
-                        // exit();
-                        return back()->withInput()->withErrors($validator);
-                    }
-                    return redirect('/')
-                        ->withInput()
-                        ->withErrors($validator);
-                }
-                if($id == 0){
-                    $task = new Task;
-                    $message = 'Task placeholder saved successfully!';
-                } else {
-                    $task = Task::find($id);
-                    $message = 'Task placeholder updated successfully!';
-                }
-                if(!isset($task)){
-                    return redirect('/'->previous() . '#modalHeader')->withErrors(['message', 'Error while trying to edit task. Task could not be found.']);
-                }
-                $task->name = $request->name;
-                $task->notes = $request->notes;
-                $message = str_replace('placeholder', $task->name, $message);
-                if($task->save()){
-                    return redirect()->back()->with(['message' => $message, 'error' => false]);
-                } else {
-                    return redirect()->back()->with(['message' => 'Error while trying to save task!', 'error' => true]);
-                };
-        
-            break;
-            case 'delete' :
-                $task = Task::find($id);
-                if(isset($task)){
-                    $task->delete();
-                    return redirect()->back()->with(['message' => 'Task '. $task->name .' deleted successfully!','error' => false]);
-                } else {
-                    return redirect()->back()->with(['message' => 'Task failed to be deleted!','error' => true]);                  
-                }
-            break;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'notes' => 'required|max:255',
+        ]);
+        if ($validator->fails()) {
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
+        $task = new Task;
+        $task->name = $request->name;
+        $task->notes = $request->notes;
+        if($task->save()){
+            return redirect()->back()->with(['message' => 'Task '.$task->name.' saved successfully!', 'error' => false]);
+        } else {
+            return redirect()->back()->with(['message' => 'Error while trying to save task!', 'error' => true]);
+        };
+    }
+
+    public function edit($id,Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'notes' => 'required|max:255',
+        ]);
+        if ($validator->fails()) {
+            return redirect('/')
+                ->withInput()
+                ->withErrors($validator);
+        }
+        $task = Task::find($id);
+        if(!isset($task)){
+            return redirect('/'->previous() . '#modalHeader')->withErrors(['message', 'Error while trying to edit task. Task could not be found.']);
+        }
+        $task->name = $request->name;
+        $task->notes = $request->notes;
+        if($task->save()){
+            return redirect()->back()->with(['message' => 'Task '.$task->name.' updated successfully!', 'error' => false]);
+        } else {
+            return redirect()->back()->with(['message' => 'Error while trying to update task!', 'error' => true]);
+        };
+    }
+
+    public function delete($id)
+    {
+        $task = Task::find($id);
+        if(isset($task) && $task->delete()){
+            return redirect()->back()->with(['message' => 'Task '. $task->name .' deleted successfully!','error' => false]);
+        } else {
+            return redirect()->back()->with(['message' => 'Task failed to be deleted!','error' => true]);                  
         }
     }
 }
