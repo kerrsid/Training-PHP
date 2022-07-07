@@ -125,7 +125,21 @@ gh ssh-key add /home/user/.ssh/id_algorithm.pub
 > **Note:** Now you can clone this repository 😁
 
 ## [Preparing The Local](#preparing-the-local)
-Run ```bash composer install``` followed by ```bash npm install```
+### [Install composer and package libraries](#install-composer-and-package-libraries)
+1. Composer
+Composer is a tool for dependency management in PHP. It allows you to declare the libraries your project depends on and it will manage (install/update) them for you.
+
+To get started you will need to install the dependencies from composer.json by running the following command:
+
+```bash composer install```
+
+2. Package (NPM)
+
+npm is the world's largest software registry. Open source developers from every continent use npm to share and borrow packages, and many organizations use npm to manage private development as well.
+
+You will need to install the packages from package.json by running the following command:
+
+```bash npm install```
 
 You have to change folder ownership and rights to avoid access errors with the following commands (changing `user` to your current user)
 ```bash
@@ -142,19 +156,62 @@ sudo chmod -R 774 bootstrap
 sudo chmod -R 774 boostrap/*
 sudo chmod -R 774 bootstrap/**/*
 ```
-Copy and paste ```.env.example``` and rename it to ```.env``` and then use the following command to
-generate .env app_key
-``` php artisan key:generate```.
+### Run the application
+
+Laravel's default ```.env``` file contains some common configuration values that may differ based on whether your application is running locally or on a production web server. These values are then retrieved from various Laravel configuration files within the ```config``` directory using Laravel's ```env``` function.
+
+Copy and paste ```.env.example``` and rename it to ```.env```.
+
+For generating ```APP_KEY``` run the following command:
+
+```bash
+php artisan key:generate
+```
+
+For the application to work properly, you will need to change DB variables to our actual ones for it to link to the DB.
+
+```
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=homestead
+DB_USERNAME=homestead
+DB_PASSWORD=secret
+```
 
 Then we must change the DB variables to our actual ones for it to link to the DB.
-For the apache2 config we must create a new .conf file inside /etc/apache2/sites-available with ``` sudo touch training-php.conf```.
-After which we enter the newly made configuration file and add the following
+
+To enable the configuration file for apache2 sites you will need to enable ```.conf``` file by running the following command:
+
+```bash
+sudo a2ensite fileName.conf
+```
+
+Other commands for apache2:
+- Status - ``` sudo service apache2 status ```
+- Start - ``` sudo service apache2 start ```
+- Restart - ``` sudo service apache2 restart ```
+- Reload- ``` sudo service apache2 reload ```
+- Stop - ``` sudo service apache2 stop ```
+- Disable Sites - ``` sudo a2dissite fileName.conf ```
+- Enable Module - ``` sudo a2enmod moduleName ```
+- Disable Module - ``` sudo a2dismod moduleName ``` 
+
+## Configure Apache Web Server
+
+For the apache2 config we must create a new ``` .conf ``` file inside ``` /etc/apache2/sites-available ``` by running command:
+
+```bash 
+sudo touch training-php.conf
+```
+
+After which we enter the newly made configuration file and add the following:
+
 ```
 <VirtualHost *:80>
         ServerName training-php.local
 
-        DocumentRoot "/pathParentDirectoryProject/public"
-        <Directory "/pathParentDirectoryProject/public">
+        DocumentRoot "/pathToProjectDirectory/public"
+        <Directory "/pathToProjectDirectory/public">
             Options Indexes FollowSymLinks MultiViews
             AllowOverride All
             Require all granted
@@ -166,9 +223,10 @@ After which we enter the newly made configuration file and add the following
         CustomLog /var/log/apache2/training-php combined
 </VirtualHost>
 ```
-``` pathParentDirectory ``` being your local path
 
-To enable it we use ``` sudo a2ensite ``` after which we reload the apache2 service ``` sudo service apache2 reload ```
+
+
+
 ## [Preparing The Database](#preparing-the-database)
 
 ### [Database Migrations](#database-migrations)
