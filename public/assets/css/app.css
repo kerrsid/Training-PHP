@@ -6,3 +6,8 @@
 .m-2 {
     margin: 2px;
 }
+
+tr.strikeout {
+    text-decoration: line-through;
+    color: rgba(0,0,0,0.5);  
+}

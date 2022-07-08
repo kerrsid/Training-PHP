@@ -72,4 +72,29 @@ class TaskController extends Controller
             return redirect()->back()->with(['message' => 'Task failed to be deleted!','error' => true]);                  
         }
     }
+
+    public function statusChange()
+    {
+        $error = false;
+        $message = '';
+        $data = [];
+        if(isset($_POST['id']) && trim($_POST['id'] != '')){
+            $task = Task::find(trim($_POST['id']));
+            if(isset($_POST['status']) && trim($_POST['status'] != '')){
+                $task->status = trim($_POST['status']);
+                $task->save();
+            } else {
+                $message = 'Error! Something went wrong when changing status!';
+                $error = true;
+            }
+        } else {
+            $message = 'Error! Invalid task ID.';
+            $error = true;
+        }
+        echo json_encode([
+            'message' => $message,
+            'error' => $error,
+        ]);
+        exit;
+    }
 }

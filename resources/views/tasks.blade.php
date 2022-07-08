@@ -7,7 +7,6 @@
                 <div class="panel-heading">
                     New Task
                 </div>
-
                 <div class="panel-body">
                     <!-- Display Validation Errors -->
                     @include('common.errors')
@@ -18,8 +17,6 @@
                     @endif
                     <!-- New Task Form -->
                     <form action="{{ route('task.add')}}" method="POST" class="form-horizontal">
-                        {{ csrf_field() }}
-
                         <!-- Task Name -->
                         <div class="form-group">
                             <label for="task-name" class="col-sm-3 control-label">Title</label>
@@ -45,17 +42,16 @@
                     </form>
                 </div>
             </div>
-
             <!-- Current Tasks -->
             @if (count($tasks) > 0)
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         Current Tasks
                     </div>
-
                     <div class="panel-body">
                         <table class="table table-striped task-table">
                             <thead>
+                                <th style="white-space nowrap;">&nbsp;</th>
                                 <th>Task</th>
                                 <th>Notes</th>
                                 <th style="white-space: nowrap;">&nbsp;</th>
@@ -63,13 +59,18 @@
                             <tbody>
                                 @foreach ($tasks as $task)
                                     <tr>
+                                        <td class="strikeout">
+                                            <div class="form-check" style="text-align:center;">
+                                                
+                                                <input type="checkbox" class="form-check-input taskStatus" name="task_status" data-id="{{ $task->id }}">
+                                            </div>
+                                        </td>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
                                         <td class="table-text"><div>{{ strlen($task->notes) > 20 ? 
                                                 substr($task->notes, 0, 20) . '...' : $task->notes }}</div></td>
                                         <!-- Task Delete Button -->
                                         <td class="d-flex">
                                             <form action="{{ route('task.delete', $task->id) }}" method="POST" class="m-2">
-                                                {{ csrf_field() }}
                                                 {{ method_field('DELETE') }}
                                                 <button type="submit" class="btn btn-danger">
                                                     <i class="fa fa-trash"></i>
@@ -93,7 +94,6 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form action="{{ route('task.edit', $task->id) }}" method="POST" class="form-horizontal">
-                                                        {{ csrf_field() }}
                                                         {{ method_field('PATCH') }}
                                                             <div class="row">
                                                                 <div class="col-md-12">

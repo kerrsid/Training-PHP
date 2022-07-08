@@ -23,4 +23,6 @@ $router->group(['middleware' => ['web']], function () use ($router) {
     $router->patch('/task/edit/{id}',             "{$ctrl}@edit")->name('task.edit');
     // Delete task
     $router->delete('/task/delete/{id}',          "{$ctrl}@delete")->name('task.delete');
+    // Change task status
+    $router->post('/task/statusChange',       "{$ctrl}@statusChange")->name('task.statusChange');
 });
