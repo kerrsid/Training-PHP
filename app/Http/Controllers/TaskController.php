@@ -7,7 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use App\Models\Files;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -103,8 +107,31 @@ class TaskController extends Controller
         return view('details', ['task' => Task::find($id)]);
     }
 
-    public function addFile($id)
+    public function addFile($id, Request $request)
     {
-        //TODO save files to storage
+        if($request->file('file')){
+            $file = $request->file('file');
+            $fileName = Carbon::now()->toDateString() . '_' . $file->getClientOriginalName();
+            if(Storage::disk('taskFiles')->put($fileName, file_get_contents($file))){
+                //TODO retrieve saved files based on task id
+                DB::table('files')->insert([
+                    'task_id' => $id,
+                    'path' => Storage::disk('taskFiles')->getDriver()->getAdapter()->getPathPrefix('') . $fileName,
+                ]);
+                //TODO add feedback on file upload
+
+                //TODO move commented code to dedicated download function
+                // $dbFile = DB::table('files')->select([
+                //     'id',
+                //     'task_id',
+                //     'path',
+                // ])
+                // ->where('task_id', $id)
+                // ->first();
+                // return response()->download($dbFile->path);
+
+                //TODO add deletion (maybe check for duplicates)
+            }
+        }
     }
 }
