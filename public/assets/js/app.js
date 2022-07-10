@@ -21,7 +21,7 @@ $(document).ready(function(){
                     $(checkbox).prop('checked', false);
                     return;
                 }
-                this.checked ? $row.addClass('strikeout') : $row.removeClass('strikeout');
+                checkbox.checked ? $row.addClass('strikeout') : $row.removeClass('strikeout');
             }
         })
     })

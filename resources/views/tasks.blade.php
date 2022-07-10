@@ -58,11 +58,11 @@
                             </thead>
                             <tbody>
                                 @foreach ($tasks as $task)
-                                    <tr>
+                                    <tr class="{{ $task->status == 1 ? 'strikeout' : '' }}">
                                         <td class="strikeout">
                                             <div class="form-check" style="text-align:center;">
                                                 
-                                                <input type="checkbox" class="form-check-input taskStatus" name="task_status" data-id="{{ $task->id }}">
+                                                <input type="checkbox" class="form-check-input taskStatus" name="task_status" data-id="{{ $task->id }}" {{ $task->status == 1 ? 'checked' : ''}} >
                                             </div>
                                         </td>
                                         <td class="table-text"><div>{{ $task->name }}</div></td>
