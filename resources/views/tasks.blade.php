@@ -65,7 +65,7 @@
                                                 <input type="checkbox" class="form-check-input taskStatus" name="task_status" data-id="{{ $task->id }}" {{ $task->status == 1 ? 'checked' : ''}} >
                                             </div>
                                         </td>
-                                        <td class="table-text"><div>{{ $task->name }}</div></td>
+                                        <td class="table-text"><a href="{{ route('task.details', $task->id) }}"><div>{{ $task->name }}</div></a></td>
                                         <td class="table-text"><div>{{ strlen($task->notes) > 20 ? 
                                                 substr($task->notes, 0, 20) . '...' : $task->notes }}</div></td>
                                         <!-- Task Delete Button -->

@@ -1,5 +1,14 @@
 $(document).ready(function(){
-    //TODO auto check based on db value
+    $('#fileBtn').on('click', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        $('#fileInput').trigger('click');
+    })
+    $('#fileInput').on('change', function(e) {
+        var file = e.target.files[0].name;
+        $('#fileInputLabel').text(file)
+        $('#uploadBtn').removeClass('hidden');
+    })
     $('.taskStatus').on('change', function(e){
         e.preventDefault();
         e.stopImmediatePropagation();

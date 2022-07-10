@@ -97,4 +97,14 @@ class TaskController extends Controller
         ]);
         exit;
     }
+
+    public function details($id)
+    {
+        return view('details', ['task' => Task::find($id)]);
+    }
+
+    public function addFile($id)
+    {
+        //TODO save files to storage
+    }
 }
