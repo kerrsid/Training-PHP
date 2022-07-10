@@ -13,7 +13,7 @@ class AddStatusColumnToTask extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table){
-            $table->boolean('status')->default(0)->comment('active - 0, done - 1');
+            $table->boolean('status')->default(0)->comment('active - 0, done - 1')->after('name');
         });
     }
 
