@@ -29,4 +29,10 @@ $router->group(['middleware' => ['web']], function () use ($router) {
     $router->get('/task/details/{id}',       "{$ctrl}@details")->name('task.details');
     // Add file for task
     $router->post('/task/addFile/{id}',      "{$ctrl}@addFile")->name('task.addFile');
+    // Delete task file
+    $router->get('/task/deleteFile/{id}',    "{$ctrl}@deleteFile")->name('file.delete');
+    // Download task file
+    $router->get('/task/downloadFile/{id}',   "{$ctrl}@downloadFile")->name('file.download');
+    // Edit file name
+    $router->patch('task/editFile/{id}',      "{$ctrl}@editFile")->name('file.edit');
 });

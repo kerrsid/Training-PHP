@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
-use App\Models\Files;
+use App\Models\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -104,34 +104,78 @@ class TaskController extends Controller
 
     public function details($id)
     {
-        return view('details', ['task' => Task::find($id)]);
+        $files = File::where('task_id', $id)->get();
+        // nu e cea mai eleganta solutie dar e cea mai simpla pentru localizarea orei (in DB sunt tot UTC)
+        foreach($files as $file){
+            $file->created_at = Carbon::parse($file->created_at)->setTimeZone('Europe/Bucharest');
+        }
+        return view('details', [
+                'task' => Task::find($id),
+                'files' => $files,
+            ]
+        );
     }
 
     public function addFile($id, Request $request)
     {
         if($request->file('file')){
             $file = $request->file('file');
-            $fileName = Carbon::now()->toDateString() . '_' . $file->getClientOriginalName();
+            $fileName = Carbon::now()->toDateString() . '_' . $id . '_' . $file->getClientOriginalName();
+            if(Storage::disk('taskFiles')->exists($fileName)){
+                $ext = pathinfo($fileName);
+                $fileName = basename($ext['filename'] . '.copy.' . $ext['extension']); 
+            }
             if(Storage::disk('taskFiles')->put($fileName, file_get_contents($file))){
-                //TODO retrieve saved files based on task id
-                DB::table('files')->insert([
-                    'task_id' => $id,
-                    'path' => Storage::disk('taskFiles')->getDriver()->getAdapter()->getPathPrefix('') . $fileName,
-                ]);
-                //TODO add feedback on file upload
-
-                //TODO move commented code to dedicated download function
-                // $dbFile = DB::table('files')->select([
-                //     'id',
-                //     'task_id',
-                //     'path',
-                // ])
-                // ->where('task_id', $id)
-                // ->first();
-                // return response()->download($dbFile->path);
-
-                //TODO add deletion (maybe check for duplicates)
+                $dbFile = new File;
+                $dbFile->task_id = $id;
+                $dbFile->filename = $fileName;
+                $dbFile->path = Storage::disk('taskFiles')->getDriver()->getAdapter()->getPathPrefix('') . $fileName;
+                $dbFile->updated_at = Carbon::now(); // timp UTC, pentru timp accurate ar trebui localizare (out of scope for now)
+                if($dbFile->save()){
+                    return back()->with(['message' => 'File '.$dbFile->filename.' saved succesfully!', 'error' => false]);
+                } else {
+                    return back()->with(['message' => 'File '.$dbFile->filename.' could not be saved!', 'error' => true]);
+                };
             }
         }
+    }
+
+    public function downloadFile($id)
+    {
+        $file = File::find($id);
+        if(!isset($file) || !Storage::disk('taskFiles')->exists($file->filename)){
+            return back()->with(['message' => 'File '.$file->filename.' could not be found!', 'error' => true]);
+        }
+        return response()->download($file->path);
+    }
+
+    public function deleteFile($id)
+    {
+        $file = File::find($id);
+        if(isset($file)){
+            if(Storage::disk('taskFiles')->exists($file->filename) && isset($file)){
+                Storage::disk('taskFiles')->delete($file->filename);
+            }
+            $file->delete();
+        } else {
+            return back()->with(['message' => 'File '.$file->filename.' could not be found!', 'error' => true]);
+        }
+        return back()->with(['message' => 'File '.$file->filename.' successfully deleted!', 'error' => false]);
+    }
+
+    public function editFile($id)
+    {
+        $file = File::find($id);
+        $oldFileName = $file->filename;
+        if(!isset($file)){
+            return back()->with(['message' => 'File '.$file->filename.' could not be found!', 'error' => true]);
+        }
+        $ext = pathinfo($file->filename)['extension'];
+        $file->filename = pathinfo(trim($_POST['name']))['filename'] . '.' . $ext;
+        $file->path = Storage::disk('taskFiles')->getDriver()->getAdapter()->getPathPrefix('') . $file->filename;
+        if($file->save()){
+            Storage::disk('taskFiles')->move($oldFilename, $file->filename);
+            return back()->with(['message' => 'File '.$file->filename.' successfully updated!', 'error' => false]);
+        };
     }
 }

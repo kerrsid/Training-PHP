@@ -15,6 +15,7 @@ class CreateFilesTable extends Migration
         Schema::create('files', function (Blueprint $table){
             $table->increments('id');
             $table->unsignedsmallinteger('task_id');
+            $table->string('filename', 250);
             $table->string('path');
             $table->timestamps();
         });
@@ -27,6 +28,6 @@ class CreateFilesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropTable('files');
     }
 }
