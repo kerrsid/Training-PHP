@@ -130,7 +130,7 @@ class TaskController extends Controller
                 $dbFile->task_id = $id;
                 $dbFile->filename = $fileName;
                 $dbFile->path = Storage::disk('taskFiles')->getDriver()->getAdapter()->getPathPrefix('') . $fileName;
-                $dbFile->updated_at = Carbon::now(); // timp UTC, pentru timp accurate ar trebui localizare (out of scope for now)
+                $dbFile->updated_at = Carbon::now();
                 if($dbFile->save()){
                     return back()->with(['message' => 'File '.$dbFile->filename.' saved succesfully!', 'error' => false]);
                 } else {
@@ -166,16 +166,20 @@ class TaskController extends Controller
     public function editFile($id)
     {
         $file = File::find($id);
-        $oldFileName = $file->filename;
+        $oldFile = clone $file;
         if(!isset($file)){
             return back()->with(['message' => 'File '.$file->filename.' could not be found!', 'error' => true]);
         }
         $ext = pathinfo($file->filename)['extension'];
         $file->filename = pathinfo(trim($_POST['name']))['filename'] . '.' . $ext;
         $file->path = Storage::disk('taskFiles')->getDriver()->getAdapter()->getPathPrefix('') . $file->filename;
-        if($file->save()){
-            Storage::disk('taskFiles')->move($oldFilename, $file->filename);
+        if($file != $oldFile){
+            if($file->save()){
+                Storage::disk('taskFiles')->move($oldFile->filename, $file->filename);
+                return back()->with(['message' => 'File '.$file->filename.' successfully updated!', 'error' => false]);
+            };
+        } else {
             return back()->with(['message' => 'File '.$file->filename.' successfully updated!', 'error' => false]);
-        };
+        }
     }
 }

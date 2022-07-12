@@ -17,6 +17,7 @@
                     @endif
                     <!-- New Task Form -->
                     <form action="{{ route('task.add')}}" method="POST" class="form-horizontal">
+                        {{ csrf_field() }}
                         <!-- Task Name -->
                         <div class="form-group">
                             <label for="task-name" class="col-sm-3 control-label">Title</label>
