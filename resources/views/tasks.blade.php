@@ -18,10 +18,20 @@
 
                         <!-- Task Name -->
                         <div class="form-group">
-                            <label for="task-name" class="col-sm-3 control-label">Task</label>
-
-                            <div class="col-sm-6">
+                            <div class=".container-sm ">
+                                <label for="task-name" class="col-sm-3 control-label">Task</label>
+                                <div class="col-sm-6">
                                 <input type="text" name="name" id="task-name" class="form-control" value="{{ old('task') }}">
+                                </div>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class=".container-sm">
+                                <label for="task-note" class="col-sm-3 control-label">Note</label>
+                                <div class="col-sm-6">
+                                    <textarea class="form-control" name="note" id="task-note" rows="3" value="{{ old('task') }}"></textarea>
+                                </div>
                             </div>
                         </div>
 
