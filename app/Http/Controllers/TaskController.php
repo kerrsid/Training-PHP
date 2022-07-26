@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Task;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
@@ -15,7 +14,6 @@ class TaskController extends Controller
     {
         return view('tasks', [
             'tasks' => Task::orderBy('created_at', 'asc')->get(),
-            // 'task' => new Task(),
         ]);
     }
 
@@ -40,14 +38,6 @@ class TaskController extends Controller
         return redirect(route('task.index'));
     }
 
-    public function edit($id)
-    {
-        return view('tasks', [
-            'tasks' => Task::orderBy('created_at', 'asc')->get(),
-            'task' => Task::find($id)
-        ]);
-    }
-
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -64,12 +54,9 @@ class TaskController extends Controller
         $task = Task::find($id);
 
         if (strcmp($task->name, $request->name) != 0 || strcmp($task->note, $request->note) != 0) {
-            DB::table('tasks')
-                ->where('id', $task->id)
-                ->update([
-                    'name' => $request->name,
-                    'note' => $request->note
-                ]);
+            $task->name = $request->name;
+            $task->note = $request->note;
+            $task->save();
 
             return redirect(route('task.index'));
         }

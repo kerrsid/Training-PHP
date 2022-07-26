@@ -1,0 +1,19 @@
+/* .task-name-table-header{
+    width: 90%;
+}  */
+
+.table-text-field{
+    width: 70%;
+}
+
+.buttons-table-field{
+    display: flex;
+}
+
+.buttons-table-field .btn{
+    width: 40px;
+    height: 40px;
+    margin-left: 5px;
+}
+
+

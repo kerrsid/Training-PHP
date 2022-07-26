@@ -20,7 +20,6 @@ $router = app("Illuminate\Routing\Router");
 $router->group(['middleware' => ['web']], function () use ($router) {
    $ctrl = 'TaskController';
    $router->get('/', "{$ctrl}@index")->name('task.index');
-   $router->put('/task/edit/{id}', "{$ctrl}@edit")->name('task.edit');
    $router->post('/task/add', "{$ctrl}@add")->name('task.add');
    $router->put('/task/update/{id}', "{$ctrl}@update")->name('task.update');
    $router->delete('/task/delete/{id}', "{$ctrl}@remove")->name('task.delete');
