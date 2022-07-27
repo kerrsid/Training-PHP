@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Task;
 use Illuminate\Support\Facades\Validator;
 
@@ -62,6 +61,21 @@ class TaskController extends Controller
         }
 
         return redirect(route('task.index'))->withInput()->withErrors("No changes detected! ");
+    }
+
+    public function modifyStatus($id)
+    {
+        $task = Task::find($id);
+
+        if ($task->complete == true) {
+            $task->complete = false;
+        } else {
+            $task->complete = true;
+        }
+
+        $task->update();
+
+        return redirect(route('task.index'));
     }
 
     public function remove($id)
