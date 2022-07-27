@@ -22,6 +22,5 @@ $router->group(['middleware' => ['web']], function () use ($router) {
    $router->get('/', "{$ctrl}@index")->name('task.index');
    $router->post('/task/add', "{$ctrl}@add")->name('task.add');
    $router->put('/task/update/{id}', "{$ctrl}@update")->name('task.update');
-   $router->patch('/task/complete/{id}', "{$ctrl}@modifyStatus")->name('task.complete');
    $router->delete('/task/delete/{id}', "{$ctrl}@remove")->name('task.delete');
 });

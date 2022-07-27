@@ -2,13 +2,12 @@
     width: 90%;
 }  */
 
-/* .table-text-field{
+.table-text-field{
     width: 70%;
-} */
+}
 
 .buttons-table-field{
     display: flex;
-    width: fit-content;
 }
 
 .buttons-table-field .btn{
