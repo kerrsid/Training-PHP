@@ -18,7 +18,7 @@
 
                         <div class="col-sm-offset-3 col-sm-6">
                             <button type="submit" class="btn btn-default">
-                                <i class="fa fa-btn fa-plus"></i>Add Task
+                                <i class="fa fa-btn fa-plus"></i>&ensp;Add Task
                             </button>
                         </div>
                     </div>
@@ -34,14 +34,19 @@
                     <table class="table table-striped task-table  table-hover">
                         <thead>
                             <th>Task</th>
-                            {{-- <th class="note-table-header">Note</th> --}}
                             <th>&nbsp;</th>
                         </thead>
                         <tbody>
                             @foreach ($tasks as $task)
                             <tr>
+                        
                                 <td class="table-text-field">
+                                 @if ( $task->complete == 1)
+                                    <div style='text-decoration: line-through;'> {{ $task->name }} </div>
+                                 @else
                                     <div>{{ $task->name }}</div>
+                                 @endif
+
                                 </td>
 
                                 <!-- Task Delete Button -->
@@ -58,6 +63,23 @@
                                             <i class="fa fa-btn fa-trash"></i>
                                         </button>
                                     </form>
+
+                                </td>
+                                <td>
+                                    <div class="form-group form-check">
+                                     <form action="{{ route('task.complete', $task->id) }}" id="form-status-{{$task->id}}" method="POST">
+                                        {{ csrf_field() }}
+                                        {{ method_field('PATCH') }}
+
+                                         @if($task->complete == 1) 
+                                            <input type="checkbox" class="form-check-input" onclick="submitStatus({{$task->id}})" checked>
+                                            <label class="form-check-label" for="status">Done</label>
+                                        @else
+                                            <input type="checkbox" class="form-check-input" onclick="submitStatus({{$task->id}})">
+                                            <label class="form-check-label" for="status">Pending</label>
+                                        @endif
+
+                                    </div>
                                 </td>
                             </tr>
 
@@ -97,6 +119,10 @@
 <script>
     function form_submit(id) {
         document.getElementById("form-modal-" + id).submit();
+    }
+
+    function submitStatus(id){
+       document.getElementById("form-status-" + id).submit();
     }
 </script>
 
