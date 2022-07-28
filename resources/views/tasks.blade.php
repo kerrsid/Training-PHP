@@ -36,22 +36,25 @@
                     <table class="table table-striped task-table  table-hover">
                         <thead>
                             <th>Task</th>
+                            <th>Note</th>
                         </thead>
                         <tbody>
                             @foreach ($tasks as $task)
                             <tr>
 
                                 <!--Show tasks, notes and tasks styling-->
-                                @if ( $task->complete == true)
+                                
                                 <td class="table-text-field">
-                                    <div style='text-decoration: line-through;'> {{ $task->name }} </div>
+                                <a class="link" href="{{ route('task.details', $task->id) }}">
+                                    <div class="{{ $task->complete ? "line-through" : ""}}"> {{ $task->name }} </div>
+                                    </a>
                                 </td>
-                                @else
+
                                 <td class="table-text-field">
-                                    <div>{{ $task->name }}</div>
+                                    <div class="{{$task->complete ? "line-through" : ""}}"> {{ $task->note }}</div>
+                                    <div class="note-preview">{{ $task->note }}</div>
                                 </td>
                                 
-                                @endif
 
                                 <!-- Task Delete Button -->
                                 <td class="buttons-table-field">
@@ -73,17 +76,13 @@
                                 <!--Change task status-->
                                 <td>
                                     <div class="form-group form-check">
-                                        <form action="{{ route('task.status', $task->id) }}" id="form-status-{{$task->id}}" method="POST">
+                                        <form action="{{ route('task.status', $task->id) }}" id="form-status-{{ $task->id }}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('POST') }}
 
-                                            @if($task->complete == true)
-                                            <input type="checkbox" class="form-check-input" onclick="submitStatus({{$task->id}})" checked>
-                                            <label class="form-check-label" for="status">Done</label>
-                                            @else
-                                            <input type="checkbox" class="form-check-input" onclick="submitStatus({{$task->id}})">
-                                            <label class="form-check-label" for="status">Pending</label>
-                                            @endif
+                                            {{-- @if($task->complete == true) --}}
+                                            <input type="checkbox" class="form-check-input" onclick="submitStatus({{ $task->id }})" {{ $task->complete ? "checked" : "" }}>
+                                            <label class="form-check-label" for="status">{{ $task->complete ? "Done" : "Pending"}}</label>
                                         </form>
                                     </div>
                                 </td>
@@ -130,6 +129,10 @@
 
     function submitStatus(id) {
         document.getElementById("form-status-" + id).submit();
+    }
+
+    function goToTaskPage(){
+        alert('it works');
     }
 </script>
 

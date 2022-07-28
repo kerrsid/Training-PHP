@@ -20,4 +20,50 @@
     margin-left: 5px;
 }
 
+.line-through{
+    text-decoration: line-through;
+}
+
+.form-check-label{
+    width: 50px;
+}
+
+.note-preview{
+    position: absolute;
+    display: none;
+}
+
+.table-text-field div:hover + .note-preview{
+    position: absolute;
+    z-index: 9999;
+    display: block;
+    overflow: auto;
+    width: 50%;
+    border: 1px solid rgb(172, 172, 172);
+    border-radius: 20px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.76);
+    text-overflow: unset;
+    word-wrap: break-word;
+    white-space: initial;
+}
+
+.link, .link:hover, .link:focus, .link:active{
+    text-decoration: none;
+    color: inherit;
+}
+
+#close-task-btn{
+    font-size: 30px; 
+    float: right;
+    color: red;
+    margin-right: 10px;
+}
+
+.task-form-group{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
 

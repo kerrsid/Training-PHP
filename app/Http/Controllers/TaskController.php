@@ -9,15 +9,19 @@ use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
 {
-    public function index()
-    {
+    public function index(){
         return view('tasks', [
             'tasks' => Task::orderBy('created_at', 'asc')->get(),
         ]);
     }
 
-    public function add(Request $request)
-    {
+    public function taskDetails($id){
+        return view('task', [
+            'task' => Task::find($id),
+        ]);
+    }
+
+    public function add(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'note' => 'max:255',
@@ -37,8 +41,7 @@ class TaskController extends Controller
         return redirect(route('task.index'));
     }
 
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id){
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'note' => 'max:255',
@@ -63,8 +66,7 @@ class TaskController extends Controller
         return redirect(route('task.index'))->withInput()->withErrors("No changes detected! ");
     }
 
-    public function selectStatus($id)
-    {
+    public function selectStatus($id){
         $task = Task::find($id);
 
         if ($task->complete == true) {
@@ -78,8 +80,8 @@ class TaskController extends Controller
         return redirect(route('task.index'));
     }
 
-    public function remove($id)
-    {
+
+    public function remove($id){
         Task::findOrFail($id)->delete();
 
         return redirect(route('task.index'));
