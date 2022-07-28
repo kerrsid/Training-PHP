@@ -48,9 +48,8 @@
     white-space: initial;
 }
 
-.link, .link:hover, .link:focus, .link:active{
+.link:hover, .link:focus, .link:active{
     text-decoration: none;
-    color: inherit;
 }
 
 #close-task-btn{
@@ -65,5 +64,7 @@
     flex-direction: column;
     padding: 10px;
 }
+
+
 
 

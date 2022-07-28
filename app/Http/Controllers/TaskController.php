@@ -16,9 +16,15 @@ class TaskController extends Controller
     }
 
     public function taskDetails($id){
-        return view('task', [
-            'task' => Task::find($id),
-        ]);
+        $task = Task::find($id);
+        
+        if ($task){
+            return view('task', [
+                'task' => $task,
+            ]);
+        }
+
+        return redirect(route('task.index'))->withInput()->withErrors("This task does not exist! ");
     }
 
     public function add(Request $request){

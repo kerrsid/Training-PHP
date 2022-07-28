@@ -1,9 +1,8 @@
-<!-- Task Name -->
 <div class="form-group">
     <div class=".container-sm ">
         <label for="task-name" class="col-sm-3 control-label">Task</label>
         <div class="col-sm-6">
-            <input type="text" name="name" id="task-name" class="form-control" value="{{ $task->name or old('add') }}">
+            <input type="text" name="name" id="task-name" class="form-control" value="{{ $task->name or old('add') }}" {{ $editable ? 'readonly' : ''}}>
         </div>
     </div>
     <br>
@@ -12,7 +11,11 @@
     <div class=".container-sm" style="margin-bottom: 5px;">
         <label for="task-note" class="col-sm-3 control-label">Note</label>
         <div class="col-sm-6">
-            <textarea class="form-control" name="note" id="task-note" rows="3">{{ $task->note or old('add') }}</textarea>
+            <textarea class="form-control" 
+                      name="note" 
+                      id="task-note" 
+                      rows="3" 
+                      {{ $editable ? 'readonly' : ''}}>{{ $task->note or old('add') }}</textarea>
         </div>
     </div>
 </div>
