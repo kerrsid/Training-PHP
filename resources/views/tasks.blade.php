@@ -7,7 +7,8 @@
             <div class="panel-heading">
                 New Task
             </div>
-            <form action="{{ route('task.add') }}" method="POST" class="form-horizontal" id="form-add-task">
+            <!-- Add new task -->
+            <form action="{{ route('task.add') }}" method="POST" class="form-horizontal">
                 {{ csrf_field() }}
                 {{ method_field('POST')}}
 
@@ -23,6 +24,7 @@
                         </div>
                     </div>
             </form>
+
             <!-- Current Tasks -->
             @if (count($tasks) > 0)
             <div class="panel panel-default">
@@ -34,19 +36,22 @@
                     <table class="table table-striped task-table  table-hover">
                         <thead>
                             <th>Task</th>
-                            <th>&nbsp;</th>
                         </thead>
                         <tbody>
                             @foreach ($tasks as $task)
                             <tr>
 
+                                <!--Show tasks, notes and tasks styling-->
+                                @if ( $task->complete == true)
                                 <td class="table-text-field">
-                                    @if ( $task->complete == 1)
                                     <div style='text-decoration: line-through;'> {{ $task->name }} </div>
-                                    @else
-                                    <div>{{ $task->name }}</div>
-                                    @endif
                                 </td>
+                                @else
+                                <td class="table-text-field">
+                                    <div>{{ $task->name }}</div>
+                                </td>
+                                
+                                @endif
 
                                 <!-- Task Delete Button -->
                                 <td class="buttons-table-field">
@@ -64,13 +69,15 @@
                                     </form>
 
                                 </td>
+
+                                <!--Change task status-->
                                 <td>
                                     <div class="form-group form-check">
-                                        <form action="{{ route('task.complete', $task->id) }}" id="form-status-{{$task->id}}" method="POST">
+                                        <form action="{{ route('task.status', $task->id) }}" id="form-status-{{$task->id}}" method="POST">
                                             {{ csrf_field() }}
-                                            {{ method_field('PATCH') }}
+                                            {{ method_field('POST') }}
 
-                                            @if($task->complete == 1)
+                                            @if($task->complete == true)
                                             <input type="checkbox" class="form-check-input" onclick="submitStatus({{$task->id}})" checked>
                                             <label class="form-check-label" for="status">Done</label>
                                             @else
@@ -82,12 +89,12 @@
                                 </td>
                             </tr>
 
-                            {{-- Edit note modal --}}
-                            <div class="modal fade" id="modal-{{ $task->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <!-- Edit task modal -->
+                            <div class="modal fade" id="modal-{{ $task->id }}" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalCenterTitle">Edit panel</h5>
+                                            <h5 class="modal-title">Edit panel</h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
@@ -101,7 +108,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" onclick="form_submit({{ $task->id }})">Save changes</button>
+                                            <button type="button" class="btn btn-primary" onclick="submitEditedTask({{ $task->id }})">Save changes</button>
                                         </div>
                                     </div>
                                 </div>
@@ -117,14 +124,13 @@
 </div>
 
 <script>
-    function form_submit(id) {
+    function submitEditedTask(id) {
         document.getElementById("form-modal-" + id).submit();
     }
 
     function submitStatus(id) {
         document.getElementById("form-status-" + id).submit();
     }
-
 </script>
 
 @endsection

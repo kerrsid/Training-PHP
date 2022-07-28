@@ -63,7 +63,7 @@ class TaskController extends Controller
         return redirect(route('task.index'))->withInput()->withErrors("No changes detected! ");
     }
 
-    public function modifyStatus($id)
+    public function selectStatus($id)
     {
         $task = Task::find($id);
 
@@ -73,7 +73,7 @@ class TaskController extends Controller
             $task->complete = true;
         }
 
-        $task->update();
+        $task->save();
 
         return redirect(route('task.index'));
     }

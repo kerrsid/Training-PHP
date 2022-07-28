@@ -1,9 +1,13 @@
-/* .task-name-table-header{
-    width: 90%;
-}  */
-
 .table-text-field{
-    width: 70%;
+    width: 30%;
+}
+
+.table-text-field div{
+  position: relative;
+  white-space: nowrap; 
+  width: 100px; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
 
 .buttons-table-field{
