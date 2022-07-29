@@ -15,7 +15,7 @@
                       name="note" 
                       id="task-note" 
                       rows="3" 
-                      {{isset($readonly ) && $readonly === true ? 'readoly' : ''}}>{{ $task->note or old('add') }}</textarea>
+                      {{isset($readonly ) && $readonly === true ? 'readonly' : ''}}>{{ $task->note or old('add') }}</textarea>
         </div>
     </div>
 </div>
