@@ -13,7 +13,7 @@
                     <i class="fa fa-btn fa-close" id="close-task-btn"></i>
                 </a>
                 <div class="form-horizontal panel-body form-group">
-                    @include('partials/note-form', ['editable' => "readonly"])
+                    @include('partials/note-form', ['readonly' => true])
                 </div>
             </div>
         </div>    

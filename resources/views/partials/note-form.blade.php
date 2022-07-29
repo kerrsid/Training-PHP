@@ -2,7 +2,7 @@
     <div class=".container-sm ">
         <label for="task-name" class="col-sm-3 control-label">Task</label>
         <div class="col-sm-6">
-            <input type="text" name="name" id="task-name" class="form-control" value="{{ $task->name or old('add') }}" {{ $editable ? 'readonly' : ''}}>
+            <input type="text" name="name" id="task-name" class="form-control" value="{{ $task->name or old('add') }}" {{ isset($readonly ) && $readonly === true ? 'readonly' : ''}}>
         </div>
     </div>
     <br>
@@ -15,7 +15,7 @@
                       name="note" 
                       id="task-note" 
                       rows="3" 
-                      {{ $editable ? 'readonly' : ''}}>{{ $task->note or old('add') }}</textarea>
+                      {{isset($readonly ) && $readonly === true ? 'readoly' : ''}}>{{ $task->note or old('add') }}</textarea>
         </div>
     </div>
 </div>

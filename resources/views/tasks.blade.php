@@ -15,7 +15,7 @@
                 <div class="panel-body">
                     @include('common.errors')
                     <div class="form-group">
-                        @include('partials/note-form', ['editable' => ''])
+                        @include('partials/note-form')
 
                         <div class="col-sm-offset-3 col-sm-6">
                             <button type="submit" class="btn btn-default">
@@ -102,7 +102,9 @@
                                         <form action="{{ route('task.update', $task->id) }}" id="form-modal-{{ $task->id }}" method="POST">
                                             {{ csrf_field() }}
                                             {{ method_field('PUT')}}
-                                            @include('partials/note-form', ['editable' => ''])
+                                            <div class="form-horizontal panel-body form-group">
+                                                 @include('partials/note-form')
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
