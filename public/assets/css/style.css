@@ -65,6 +65,29 @@
     padding: 10px;
 }
 
+.btn-file-upload{
+    width: 187px;
+    position:relative;
+}
 
+#document-view{
+    width: 90%;
+    margin: auto;
+    background-color: #F5F5F5;
+    height: 60vh;
+    margin-top:20px;
+    border: 1px solid rgb(158, 158, 158);
+    border-radius: 10px;
+}
 
+#file-name-header{
+    padding: 5px;
+    background-color: #F5F5F5;
+    border-radius: 5px;
+}
+
+#file-name{
+    margin-bottom: 5px;
+    text-align: center;
+}
 

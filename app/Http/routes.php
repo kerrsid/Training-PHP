@@ -25,4 +25,10 @@ $router->group(['middleware' => ['web']], function () use ($router) {
    $router->post('/task/status/{id}', "{$ctrl}@selectStatus")->name('task.status');
    $router->put('/task/update/{id}', "{$ctrl}@update")->name('task.update');
    $router->delete('/task/delete/{id}', "{$ctrl}@remove")->name('task.delete');
+
+   $router->get('/file/download/{id}', "{$ctrl}@downloadFile")->name('file.download');
+   $router->get('/file/preview/{id}', "{$ctrl}@showFile")->name('file.preview');
+   $router->post('/file/upload/{id}', "{$ctrl}@uploadFile")->name('file.upload');
+   $router->put('/file/rename/{id}', "{$ctrl}@renameFile")->name('file.rename');
+   $router->delete('/file/delete/{id}', "{$ctrl}@deleteFile")->name('file.delete');
 });
