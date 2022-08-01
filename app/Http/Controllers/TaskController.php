@@ -186,7 +186,6 @@ class TaskController extends Controller
             'fileName' => [
                 'required',
                 'max:50',
-                'regex:/^[A-Za-z0-9 _]*[A-Za-z0-9 ._:\\]*[\.]?[A-Za-z0-9]+$/'
             ],
         ]);
 
@@ -204,7 +203,7 @@ class TaskController extends Controller
         if ($originalFileName === rtrim($request->fileName)) {
             return redirect(route('task.details', $id))
                 ->withInput()
-                ->withErrors("The name of the file is the same!");
+                ->withErrors("The file name has not been changed!");
         }
 
         $fileExtension = pathinfo($task->file_path, PATHINFO_EXTENSION);

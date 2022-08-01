@@ -50,6 +50,7 @@
                         {{ method_field('DELETE') }}
                     </form>       
                    
+                   <p>Rename: </p>
                    <form action="{{ route('file.rename', $task->id) }}" method="POST" id="form-rename-doc">
                         {{ csrf_field() }}
                         {{ method_field('PUT') }}
@@ -97,7 +98,7 @@
             var size = parseFloat(doc.files[0].size / 1024).toFixed(2);
             
             if (size > 2048){
-                alert("This document is too big to be loaded to this server! (max-size: 2MB)");
+                alert("This document is too big to be loaded on this server! (max-size: 2MB)");
                 return;
             }
         }
@@ -117,9 +118,16 @@
         } else {
             iframe.attr("src", iframe.data("src"));
         }
+
+        return;
     }
 
     function printDocument() {
+        if ($("#document-view").contents().find("body").is(':empty')) {
+            alert("Nothing to print! (Please open document preview)!!");
+            return;
+        }
+
         document.getElementById("document-view").contentWindow.print();
     }
 
